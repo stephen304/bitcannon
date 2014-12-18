@@ -1,4 +1,6 @@
-build:
+build: clean
 	go build -o build/bitcannon
-deploy:
+deploy: clean
 	gox -output="build/bitcannon_{{.OS}}_{{.Arch}}"
+clean:
+	rm -rf build
