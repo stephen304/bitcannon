@@ -21,5 +21,11 @@ angular
           templateUrl: 'views/main.html',
           controller:'MainCtrl',
           pageTitle: 'Home'
+        })
+        .state('search', {
+          url: '/search',
+          templateUrl: 'views/search.html',
+          controller:'SearchCtrl',
+          pageTitle: 'Search'
         });
       });

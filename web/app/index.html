@@ -20,8 +20,26 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
+    <div class"navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" ui-sref="index">BitCannon</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <!-- Add your site or application content here -->
-    <div class="container">
+    <!-- <div class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li class="active"><a ng-href="#">Home</a></li>
@@ -29,7 +47,7 @@
           <li><a ng-href="#">Contact</a></li>
         </ul>
         <h3 class="text-muted">bitCannon</h3>
-      </div>
+      </div> -->
 
       <div ui-view="" ng-controller="MainCtrl"></div>
 
@@ -70,6 +88,7 @@
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/search.js"></script>
         <!-- endbuild -->
 </body>
 </html>
