@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"log"
+	// "log"
 	"os"
 	"strings"
 )
@@ -18,15 +18,15 @@ var err error
 type Torrent struct {
 	ID       bson.ObjectId `bson:"_id,omitempty"`
 	Btih     string
-	Title    string
-	Category string
-	Details  string
-	Download string
+	Title    []string
+	Category []string
+	Details  []string
+	Download []string
 }
 
 func main() {
 	// Try to connect to the database
-	session, err = mgo.Dial("127.0.0.1")
+	session, err = mgo.Dial("10.0.1.12")
 	if err != nil {
 		fmt.Println("Couldn't connect to Mongo. Please make sure it is installed and running.")
 		return
@@ -34,7 +34,7 @@ func main() {
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 	collection = session.DB("bitcannon").C("torrents")
-	collection.EnsureIndex(mgo.Index{Key: []string{"title"}})
+	collection.EnsureIndex(mgo.Index{Key: []string{"$text:title"}, Name: "title"})
 
 	if len(os.Args) > 1 {
 		importFile(os.Args[1])
@@ -88,7 +88,7 @@ func importLine(line string) (bool, error) {
 
 // hash, title, category, details, download /*hash string, title string, category string, details string*/
 func importHash(btih string, title string, category string, details string, download string) (bool, error) {
-	err := collection.Insert(&Torrent{Btih: btih, Title: title, Category: category, Details: details, Download: download})
+	err := collection.Insert(&Torrent{Btih: btih, Title: []string{title}, Category: []string{category}, Details: []string{details}, Download: []string{download}})
 	if err != nil {
 		return false, errors.New("Something went wrong when trying to insert.")
 	}
