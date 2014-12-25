@@ -27,5 +27,11 @@ angular
           templateUrl: 'views/search.html',
           controller:'SearchCtrl',
           pageTitle: 'Search'
+        })
+        .state('about', {
+          url: '/about',
+          templateUrl: 'views/about.html',
+          controller:'MainCtrl',
+          pageTitle: 'About'
         });
       });
