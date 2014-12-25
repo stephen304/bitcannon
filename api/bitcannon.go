@@ -7,6 +7,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	// "log"
+	"github.com/go-martini/martini"
 	"os"
 	"strings"
 )
@@ -29,18 +30,51 @@ func main() {
 	session, err = mgo.Dial("10.0.1.12")
 	if err != nil {
 		fmt.Println("Couldn't connect to Mongo. Please make sure it is installed and running.")
-		return
+		//return
+	} else {
+		defer session.Close()
+		session.SetMode(mgo.Monotonic, true)
+		collection = session.DB("bitcannon").C("torrents")
+		collection.EnsureIndex(mgo.Index{Key: []string{"$text:title"}, Name: "title"})
 	}
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
-	collection = session.DB("bitcannon").C("torrents")
-	collection.EnsureIndex(mgo.Index{Key: []string{"$text:title"}, Name: "title"})
 
 	if len(os.Args) > 1 {
 		importFile(os.Args[1])
 	} else {
-		//Run server?
+		runServer()
 	}
+}
+
+func runServer() {
+	fmt.Println("Starting the API server.")
+	m := martini.Classic()
+	m.Get("/stats", func() string {
+		return `{
+        \"ns\" : \"app.users\",             // namespace
+        \"count\" : 9,                    // number of documents
+        \"size\" : 432,                   // collection size in bytes
+        \"avgObjSize\" : 48,              // average object size in bytes
+        \"storageSize\" : 3840,           // (pre)allocated space for the collection in bytes
+        \"numExtents\" : 1,               // number of extents (contiguously allocated chunks of datafile space)
+        \"nindexes\" : 2,                 // number of indexes
+        \"lastExtentSize\" : 3840,        // size of the most recently created extent in bytes
+        \"paddingFactor\" : 1,            // padding can speed up updates if documents grow
+        \"flags\" : 1,
+        \"totalIndexSize\" : 16384,       // total index size in bytes
+        \"indexSizes\" : {                // size of specific indexes in bytes
+                \"_id_\" : 8192,
+                \"username\" : 8192
+        },
+        \"ok\" : 1
+}`
+	})
+	m.Get("/torrent/:btih", func(params martini.Params) string {
+		return `{
+			"btih": "` + params["btih"] + `",
+			"title": "This is a title"
+}`
+	})
+	m.RunOnAddr(":1337")
 }
 
 func importFile(filename string) {
