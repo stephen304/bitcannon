@@ -23,7 +23,7 @@ angular
           pageTitle: 'Home'
         })
         .state('search', {
-          url: '/search',
+          url: '/search/:query',
           templateUrl: 'views/search.html',
           controller:'SearchCtrl',
           pageTitle: 'Search'
