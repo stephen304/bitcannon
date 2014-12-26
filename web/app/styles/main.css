@@ -1,6 +1,9 @@
+/* Push content to start at the bottom of the navbar */
 body {
-  padding-top: 60px; // Push content to start at the bottom of the navbar
+  padding-top: 60px;
 }
+
+/* Ensures that the brand button clickable area is full height */
 .navbar-brand {
-    height: 60px; // Ensures that the brand button clickable area is full height
+  height: 60px;
 }

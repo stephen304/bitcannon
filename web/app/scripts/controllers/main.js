@@ -8,7 +8,7 @@
  * Controller of the bitCannonApp
  */
 angular.module('bitCannonApp')
-  .controller('MainCtrl', function ($scope, $state) {
+  .controller('MainCtrl', function($scope, $state) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -16,7 +16,9 @@ angular.module('bitCannonApp')
     ];
     $scope.submit = function() {
       if ($scope.query) {
-        $state.go('search', {query: $scope.query});
+        $state.go('search', {
+          query: $scope.query
+        });
       }
-    }
+    };
   });

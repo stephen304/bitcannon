@@ -8,7 +8,7 @@
  * Controller of the bitCannonApp
  */
 angular.module('bitCannonApp')
-  .controller('SearchCtrl', function ($scope, $stateParams) {
+  .controller('SearchCtrl', function($scope, $stateParams) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
