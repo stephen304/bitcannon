@@ -1,4 +1,6 @@
-/* Space out content a bit */
 body {
-  padding-top: 60px;
+  padding-top: 60px; // Push content to start at the bottom of the navbar
+}
+.navbar-brand {
+    height: 60px; // Ensures that the brand button clickable area is full height
 }
