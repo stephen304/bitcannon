@@ -28,6 +28,12 @@ angular
         controller: 'SearchCtrl',
         pageTitle: 'Search'
       })
+      .state('torrent', {
+        url: '/torrent/:btih',
+        templateUrl: 'views/torrent.html',
+        controller: 'TorrentCtrl',
+        pageTitle: 'Torrent'
+      })
       .state('about', {
         url: '/about',
         templateUrl: 'views/about.html',
