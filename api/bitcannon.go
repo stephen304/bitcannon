@@ -8,6 +8,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	// "log"
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/render"
 	"os"
 	"strings"
 )
@@ -30,13 +31,12 @@ func main() {
 	session, err = mgo.Dial("10.0.1.12")
 	if err != nil {
 		fmt.Println("Couldn't connect to Mongo. Please make sure it is installed and running.")
-		//return
-	} else {
-		defer session.Close()
-		session.SetMode(mgo.Monotonic, true)
-		collection = session.DB("bitcannon").C("torrents")
-		collection.EnsureIndex(mgo.Index{Key: []string{"$text:title"}, Name: "title"})
+		return
 	}
+	defer session.Close()
+	session.SetMode(mgo.Monotonic, true)
+	collection = session.DB("bitcannon").C("torrents")
+	collection.EnsureIndex(mgo.Index{Key: []string{"$text:title"}, Name: "title"})
 
 	if len(os.Args) > 1 {
 		importFile(os.Args[1])
@@ -48,31 +48,34 @@ func main() {
 func runServer() {
 	fmt.Println("Starting the API server.")
 	m := martini.Classic()
-	m.Get("/stats", func() string {
-		return `{
-        \"ns\" : \"app.users\",             // namespace
-        \"count\" : 9,                    // number of documents
-        \"size\" : 432,                   // collection size in bytes
-        \"avgObjSize\" : 48,              // average object size in bytes
-        \"storageSize\" : 3840,           // (pre)allocated space for the collection in bytes
-        \"numExtents\" : 1,               // number of extents (contiguously allocated chunks of datafile space)
-        \"nindexes\" : 2,                 // number of indexes
-        \"lastExtentSize\" : 3840,        // size of the most recently created extent in bytes
-        \"paddingFactor\" : 1,            // padding can speed up updates if documents grow
-        \"flags\" : 1,
-        \"totalIndexSize\" : 16384,       // total index size in bytes
-        \"indexSizes\" : {                // size of specific indexes in bytes
-                \"_id_\" : 8192,
-                \"username\" : 8192
-        },
-        \"ok\" : 1
-}`
+	m.Use(render.Renderer())
+	m.Get("/stats", func(r render.Render) {
+		count, err := collection.Count()
+		if err != nil {
+			r.JSON(500, map[string]interface{}{"count": "API Error"})
+			return
+		}
+		r.JSON(200, map[string]interface{}{"count": count})
 	})
-	m.Get("/torrent/:btih", func(params martini.Params) string {
-		return `{
-			"btih": "` + params["btih"] + `",
-			"title": "This is a title"
-}`
+	m.Get("/torrent/:btih", func(r render.Render, params martini.Params) {
+		result := Torrent{}
+		err = collection.Find(bson.M{"btih": params["btih"]}).One(&result)
+		if err != nil {
+			r.JSON(404, map[string]interface{}{"message": "Torrent not found."})
+			return
+		}
+		r.JSON(200, result)
+	})
+	m.Get("/search/:query", func(r render.Render, params martini.Params) {
+		result := []Torrent{}
+		pipe := collection.Pipe([]bson.M{{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}}})
+		iter := pipe.Iter()
+		err = iter.All(&result)
+		if err != nil {
+			r.JSON(404, map[string]interface{}{"message": err.Error()})
+			return
+		}
+		r.JSON(200, result)
 	})
 	m.RunOnAddr(":1337")
 }
