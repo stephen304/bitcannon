@@ -34,4 +34,7 @@ angular
         controller: 'MainCtrl',
         pageTitle: 'About'
       });
+  })
+  .run(function($rootScope) {
+    $rootScope.api = 'http://localhost:1337';
   });

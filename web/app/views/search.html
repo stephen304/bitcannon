@@ -1,1 +1,24 @@
-<p>Here are search results for {{query}}</p>
+<div class="container">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Category
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="result in results">
+        <td>
+          {{result.Title[0]}}
+        </td>
+        <td>
+          {{result.Category[0]}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
