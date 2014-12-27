@@ -68,7 +68,10 @@ func runServer() {
 	})
 	m.Get("/search/:query", func(r render.Render, params martini.Params) {
 		result := []Torrent{}
-		pipe := collection.Pipe([]bson.M{{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}}})
+		pipe := collection.Pipe([]bson.M{
+			{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
+			{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
+		})
 		iter := pipe.Iter()
 		err = iter.All(&result)
 		if err != nil {
