@@ -8,6 +8,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	// "log"
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/cors"
 	"github.com/martini-contrib/render"
 	"os"
 	"strings"
@@ -49,6 +50,11 @@ func runServer() {
 	fmt.Println("Starting the API server.")
 	m := martini.Classic()
 	m.Use(render.Renderer())
+	m.Use(cors.Allow(&cors.Options{
+		AllowAllOrigins: true,
+		AllowMethods:    []string{"POST", "GET"},
+		ExposeHeaders:   []string{"Content-Length"},
+	}))
 	m.Get("/stats", func(r render.Render) {
 		count, err := collection.Count()
 		if err != nil {
