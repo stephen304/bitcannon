@@ -13,7 +13,8 @@ angular
     'ngAnimate',
     'ui.router'
   ])
-  .config(function($stateProvider, $urlRouterProvider) {
+  .config(function($stateProvider, $urlRouterProvider, $compileProvider) {
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|magnet):/);
     $urlRouterProvider.otherwise('/');
     $stateProvider
       .state('index', {
