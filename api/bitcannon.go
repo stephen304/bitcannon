@@ -69,7 +69,19 @@ func runServer() {
 			r.JSON(500, map[string]interface{}{"error": "API Error"})
 			return
 		}
-		r.JSON(200, result)
+		var size int
+		for size = range result {
+		}
+		stats := make([]map[string]interface{}, size+1, size+1)
+		for i, cat := range result {
+			total, err := collection.Find(bson.M{"category": cat}).Count()
+			if err != nil {
+				stats[i] = map[string]interface{}{cat: 0}
+			} else {
+				stats[i] = map[string]interface{}{"name": cat, "count": total}
+			}
+		}
+		r.JSON(200, stats)
 	})
 	m.Get("/torrent/:btih", func(r render.Render, params martini.Params) {
 		result := Torrent{}
