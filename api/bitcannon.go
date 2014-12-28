@@ -19,8 +19,7 @@ var collection *mgo.Collection
 var err error
 
 type Torrent struct {
-	ID       bson.ObjectId `bson:"_id,omitempty"`
-	Btih     string
+	Btih     string `bson:"_id,omitempty"`
 	Title    []string
 	Category []string
 	Details  []string
