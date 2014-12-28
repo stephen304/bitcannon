@@ -62,6 +62,15 @@ func runServer() {
 		}
 		r.JSON(200, map[string]interface{}{"count": count})
 	})
+	m.Get("/browse", func(r render.Render) {
+		var result []string
+		err := collection.Find(nil).Distinct("category", &result)
+		if err != nil {
+			r.JSON(500, map[string]interface{}{"error": "API Error"})
+			return
+		}
+		r.JSON(200, result)
+	})
 	m.Get("/torrent/:btih", func(r render.Render, params martini.Params) {
 		result := Torrent{}
 		err = collection.Find(bson.M{"btih": params["btih"]}).One(&result)
