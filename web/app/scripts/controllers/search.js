@@ -18,7 +18,6 @@ angular.module('bitCannonApp')
     var init = function() {
       $http.get($rootScope.api + '/search/' + $scope.query).
         success(function(data, status) {
-          console.log(data);
           if (status === 200) {
             $scope.results = data;
           }
