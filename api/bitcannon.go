@@ -85,7 +85,7 @@ func runServer() {
 	})
 	m.Get("/torrent/:btih", func(r render.Render, params martini.Params) {
 		result := Torrent{}
-		err = collection.Find(bson.M{"btih": params["btih"]}).One(&result)
+		err = collection.Find(bson.M{"_id": params["btih"]}).One(&result)
 		if err != nil {
 			r.JSON(404, map[string]interface{}{"message": "Torrent not found."})
 			return
