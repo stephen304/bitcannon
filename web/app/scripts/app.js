@@ -24,6 +24,12 @@ angular
         controller: 'MainCtrl',
         pageTitle: 'Home'
       })
+      .state('browse', {
+        url: '/browse',
+        templateUrl: 'views/browse.html',
+        controller: 'BrowseCtrl',
+        pageTitle: 'Browse'
+      })
       .state('search', {
         url: '/search/:query',
         templateUrl: 'views/search.html',
