@@ -2,7 +2,7 @@
   <div class="row">
     <div ng-repeat="result in results" class="col-md-3">
       <h3>
-        {{result.name}}
+        <a ui-sref="browseSearch({category: '{{result.name}}'})">{{result.name}}</a>
       </h3>
       <p>
         {{result.count}} torrents in this category.

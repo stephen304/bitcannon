@@ -30,6 +30,12 @@ angular
         controller: 'BrowseCtrl',
         pageTitle: 'Browse'
       })
+      .state('browseSearch', {
+        url: '/browse/:category',
+        templateUrl: 'views/search.html',
+        controller: 'BrowsesearchCtrl',
+        pageTitle: 'Browse'
+      })
       .state('search', {
         url: '/search/:query',
         templateUrl: 'views/search.html',
