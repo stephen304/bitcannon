@@ -50,9 +50,9 @@ func runServer() {
 	m := martini.Classic()
 	m.Use(render.Renderer())
 	m.Use(cors.Allow(&cors.Options{
-		AllowAllOrigins: true,
-		AllowMethods:    []string{"POST", "GET"},
-		ExposeHeaders:   []string{"Content-Length"},
+		AllowOrigins:  []string{"*"},
+		AllowMethods:  []string{"POST", "GET"},
+		ExposeHeaders: []string{"Content-Length"},
 	}))
 	m.Get("/stats", func(r render.Render) {
 		count, err := collection.Count()
