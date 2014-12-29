@@ -18,6 +18,8 @@ var session *mgo.Session
 var collection *mgo.Collection
 var err error
 
+const resultLimit int = 100
+
 type Torrent struct {
 	Btih     string `bson:"_id,omitempty"`
 	Title    []string
@@ -82,6 +84,15 @@ func runServer() {
 			}
 		}
 		r.JSON(200, stats)
+	})
+	m.Get("/browse/:category", func(r render.Render, params martini.Params) {
+		result := []Torrent{}
+		err = collection.Find(bson.M{"category": params["category"]}).Limit(resultLimit).All(&result)
+		if err != nil {
+			r.JSON(404, map[string]interface{}{"message": err.Error()})
+			return
+		}
+		r.JSON(200, result)
 	})
 	m.Get("/torrent/:btih", func(r render.Render, params martini.Params) {
 		result := Torrent{}
