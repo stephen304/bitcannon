@@ -62,4 +62,7 @@ angular
     else {
       $rootScope.api = $window.localStorage.api;
     }
+    $rootScope.saveAPI = function() {
+      $window.localStorage.api = $rootScope.api;
+    }
   });
