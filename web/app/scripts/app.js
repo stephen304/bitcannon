@@ -55,6 +55,11 @@ angular
         pageTitle: 'About'
       });
   })
-  .run(function($rootScope) {
-    $rootScope.api = 'http://localhost:1337';
+  .run(function($rootScope, $window) {
+    if (typeof $window.localStorage.api === 'undefined' || $window.localStorage.api == '') {
+      $rootScope.api = 'http://localhost:1337';
+    }
+    else {
+      $rootScope.api = $window.localStorage.api;
+    }
   });
