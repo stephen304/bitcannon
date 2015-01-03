@@ -18,16 +18,29 @@ Follow these steps to set up BitCannon for personal use:
 
 You should see the BitCannon interface at this point
 
-* Update/add torrents by downloading .gz torrent archives and dragging them onto the bitcannon.exe
+* Update/add torrents by downloading .gz torrent archives and dragging the extracted text files onto the bitcannon.exe
 
 ## How to use: Building From Source
 
-* Install and run MongoDB
+### MongoDB
+* Install and run MongoDB from official packages
+
+### API
 * Clone the repo
-* Install go and npm
-* In `/api`, type `go build`
+* Install go (`packer -S go-git`)
+* Set $GOPATH (`export GOPATH=$HOME/.go`)
+* In /api, run `go get`
+* Type `make build` to compile the api into `build/`
+* Optional: Cross compile for other platforms
+  * Run `go get github.com/mitchellh/gox`
+  * Build the toolchain with `gox -build-toolchain`
+  * Compile with `make deploy`
 * Run `bitcannon` to run the api server
-* Run `bitcannon <btArchive.gz>` to import torrents
+* Run `bitcannon <btArchive.txt>` to import torrents
+
+### Web
+* Install node (`sudo pacman -S nodejs`)
+* Install bower and grunt with `sudo npm install -g grunt` and `sudo npm install -g grunt-cli`
 * In `/web` type `npm install`, `bower install`, and `grunt`
 * Open `dist/index.html` to use BitCannon. Place the contents of the dist folder on a webserver to run it publicly
 
