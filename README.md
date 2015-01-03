@@ -29,6 +29,8 @@ You should see the BitCannon interface at this point
 * Clone the repo
 * Install go (`packer -S go-git`)
 * Set $GOPATH (`export GOPATH=$HOME/.go`)
+* Set $PATH (`export PATH="$PATH:$GOPATH/bin"`)
+* Restart your terminal if you added these env vars to the startup script
 * In /api, run `go get`
 * Type `make build` to compile the api into `build/`
 * Optional: Cross compile for other platforms
