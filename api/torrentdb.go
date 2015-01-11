@@ -6,6 +6,7 @@ import (
 	"github.com/martini-contrib/render"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"strconv"
 )
 
 type TorrentDB struct {
@@ -79,9 +80,20 @@ func (torrentDB *TorrentDB) Browse(r render.Render, params martini.Params) {
 
 func (torrentDB *TorrentDB) Search(r render.Render, params martini.Params) {
 	result := []Torrent{}
+	skip := 0
+	if value, ok := params["page"]; ok {
+		page, err := strconv.Atoi(value)
+		if err != nil {
+			r.JSON(400, map[string]interface{}{"message": err.Error()})
+			return
+		}
+		skip = page * resultLimit
+	}
 	pipe := torrentDB.collection.Pipe([]bson.M{
 		{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
 		{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
+		{"$skip": skip},
+		{"$limit": resultLimit},
 	})
 	iter := pipe.Iter()
 	err = iter.All(&result)
