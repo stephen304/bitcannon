@@ -17,14 +17,14 @@ angular.module('bitCannonApp')
     $scope.saveAPI = function() {
       $rootScope.api = $scope.apiBox;
       $window.localStorage.api = $rootScope.api;
-    }
+    };
     $scope.clearAPIBox = function() {
       $scope.apiBox = $rootScope.api;
-    }
+    };
     $scope.resetAPI = function() {
       delete $window.localStorage.api;
       $rootScope.api = 'http://localhost:1337';
       $scope.apiBox = $rootScope.api;
-    }
+    };
     $scope.apiBox = $rootScope.api;
   });
