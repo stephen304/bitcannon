@@ -20,6 +20,12 @@ type Torrent struct {
 	Category []string
 	Details  []string
 	Download []string
+	Stats    Stats
+}
+
+type Stats struct {
+	Seeders  int
+	Leechers int
 }
 
 func NewTorrentDB(url string) (*TorrentDB, error) {
@@ -115,7 +121,14 @@ func (torrentDB *TorrentDB) Get(r render.Render, params martini.Params) {
 }
 
 func (torrentDB *TorrentDB) Insert(btih string, title string, category string, details string, download string) (bool, error) {
-	err := torrentDB.collection.Insert(&Torrent{Btih: btih, Title: []string{title}, Category: []string{category}, Details: []string{details}, Download: []string{download}})
+	err := torrentDB.collection.Insert(
+		&Torrent{Btih: btih,
+			Title:    []string{title},
+			Category: []string{category},
+			Details:  []string{details},
+			Download: []string{download},
+			Stats:    Stats{Seeders: 0, Leechers: 0},
+		})
 	if err != nil {
 		return false, errors.New("Something went wrong when trying to insert.")
 	}
