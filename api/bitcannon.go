@@ -16,7 +16,7 @@ const resultLimit int = 100
 
 func main() {
 	// Try to connect to the database
-	torrentDB, err = NewTorrentDB("10.0.1.12")
+	torrentDB, err = NewTorrentDB("127.0.0.1")
 	if err != nil {
 		fmt.Println("Couldn't connect to Mongo. Please make sure it is installed and running.")
 		return
