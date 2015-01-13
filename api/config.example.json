@@ -1,0 +1,16 @@
+{
+  "mongo": "127.0.0.1",
+  "trackers": [
+    "udp://tracker1.com:80",
+    "udp://tracker2.com:1337"
+  ],
+  "archives": [{
+    "name": "Site1",
+    "url": "http://site1.com/archive.txt.gz",
+    "frequency": 3600
+  }, {
+    "name": "Site2",
+    "url": "http://site2.com/archive.txt.gz",
+    "frequency": 86400
+  }]
+}
