@@ -1,6 +1,6 @@
-build: clean
+build: clean prep configure
 	go build -o build/bitcannon
-deploy: clean
+deploy: clean prep configure
 	gox -output="build/bitcannon_{{.OS}}_{{.Arch}}"
 
 clean:
