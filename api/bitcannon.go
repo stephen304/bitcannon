@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	// "log"
+	"github.com/antonholmquist/jason"
+	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -15,8 +17,21 @@ var err error
 const resultLimit int = 100
 
 func main() {
+	// Get mongo url from config.json, otherwise default to 127.0.0.1
+	mongo := "127.0.0.1"
+	f, err := ioutil.ReadFile("config.json")
+	if err == nil {
+		json, err := jason.NewObjectFromBytes(f)
+		if err == nil {
+			val, err := json.GetString("mongo")
+			if err == nil {
+				mongo = val
+			}
+		}
+	}
 	// Try to connect to the database
-	torrentDB, err = NewTorrentDB("127.0.0.1")
+	fmt.Println("Connecting to Mongo at " + mongo)
+	torrentDB, err = NewTorrentDB(mongo)
 	if err != nil {
 		fmt.Println("Couldn't connect to Mongo. Please make sure it is installed and running.")
 		return
