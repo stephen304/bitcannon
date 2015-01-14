@@ -7,5 +7,6 @@ clean:
 	rm -rf build
 prep:
 	mkdir build
+	go-bindata -nocompress=true web/...
 config:
 	cp config.json build/

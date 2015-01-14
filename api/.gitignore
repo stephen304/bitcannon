@@ -1,2 +1,4 @@
 build/
+web/
 config.json
+bindata.go

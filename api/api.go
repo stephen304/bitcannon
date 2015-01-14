@@ -4,6 +4,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/cors"
 	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/staticbin"
 )
 
 type API struct {
@@ -18,6 +19,7 @@ func NewAPI() *API {
 		AllowMethods:  []string{"POST", "GET"},
 		ExposeHeaders: []string{"Content-Length"},
 	}))
+	m.Use(staticbin.Static("web", Asset))
 	return &API{m}
 }
 
