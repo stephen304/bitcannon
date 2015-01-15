@@ -47,6 +47,7 @@ func main() {
 
 func runServer() {
 	fmt.Println("Starting the API server.")
+	fmt.Println("BitCannon now running on http://127.0.0.1:" + "1337" + "/")
 	api := NewAPI()
 	api.AddRoutes()
 	api.Run(":1337")
