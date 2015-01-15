@@ -14,7 +14,7 @@ Follow these steps to set up BitCannon for personal use:
 * Unzip the release somewhere that is convenient
 * Run the mongod program to start the database (`C:\Program Files\MongoDB\bin\mongod.exe`)
 * Run bitcannon for your platform from the release zip (`bitcannon.exe`)
-* Open the html file from the release zip
+* Open http://127.0.0.1:1337/ in your browser
 
 You should see the BitCannon interface at this point
 
