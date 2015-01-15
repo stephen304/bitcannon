@@ -19,6 +19,7 @@ const resultLimit int = 100
 func main() {
 	// Get mongo url from config.json, otherwise default to 127.0.0.1
 	mongo := "127.0.0.1"
+	bitcannonPort := "1337"
 	f, err := ioutil.ReadFile("config.json")
 	if err == nil {
 		json, err := jason.NewObjectFromBytes(f)
@@ -26,6 +27,10 @@ func main() {
 			val, err := json.GetString("mongo")
 			if err == nil {
 				mongo = val
+			}
+			val, err = json.GetString("bitcannonPort")
+			if err == nil {
+				bitcannonPort = val
 			}
 		}
 	}
@@ -41,16 +46,16 @@ func main() {
 	if len(os.Args) > 1 {
 		importFile(os.Args[1])
 	} else {
-		runServer()
+		runServer(bitcannonPort)
 	}
 }
 
-func runServer() {
+func runServer(bitcannonPort string) {
 	fmt.Println("Starting the API server.")
-	fmt.Println("BitCannon now running on http://127.0.0.1:" + "1337" + "/")
+	fmt.Println("BitCannon now running on http://127.0.0.1:" + bitcannonPort + "/")
 	api := NewAPI()
 	api.AddRoutes()
-	api.Run(":1337")
+	api.Run(":" + bitcannonPort)
 }
 
 func importFile(filename string) {
