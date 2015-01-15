@@ -23,7 +23,7 @@ angular.module('bitCannonApp')
     };
     $scope.resetAPI = function() {
       delete $window.localStorage.api;
-      $rootScope.api = 'http://localhost:1337';
+      $rootScope.api = '';// Old default http://localhost:1337
       $scope.apiBox = $rootScope.api;
     };
     $scope.apiBox = $rootScope.api;
