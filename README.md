@@ -24,6 +24,8 @@ You should see the BitCannon interface at this point
 
 ## How to use: Building From Source
 
+__(Note: These building instructions may get out of date from time to time due to code changes. If you just want to use BitCannon, you should use the Wiki instructions instead.)__
+
 ### MongoDB
 * Install and run MongoDB from official packages
 
