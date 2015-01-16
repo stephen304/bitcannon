@@ -1,17 +1,17 @@
 package main
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
-	"strconv"
+	_ "github.com/mattn/go-sqlite3"
+	"log"
+	// "strconv"
 )
 
 type TorrentDB struct {
-	session    *mgo.Session
-	collection *mgo.Collection
+	db *sql.DB
 }
 
 type Torrent struct {
@@ -29,108 +29,123 @@ type Stats struct {
 }
 
 func NewTorrentDB(url string) (*TorrentDB, error) {
-	session, err := mgo.Dial(url)
+	db, err := sql.Open("sqlite3", "./foo.db")
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
-	session.SetMode(mgo.Monotonic, true)
-	collection := session.DB("bitcannon").C("torrents")
-	collection.EnsureIndex(mgo.Index{Key: []string{"$text:title"}, Name: "title"})
-	return &TorrentDB{session, collection}, nil
+
+	sqlStmt := `
+	create table if not exists torrents (btih string not null primary key, title text, category text, details text, download text, seeders int, leechers int);
+	`
+	_, err = db.Exec(sqlStmt)
+	if err != nil {
+		log.Printf("%q: %s\n", err, sqlStmt)
+		return nil, nil
+	}
+	return &TorrentDB{db}, nil
 }
 
 func (torrentDB *TorrentDB) Close() {
-	torrentDB.session.Close()
+	torrentDB.db.Close()
 }
 
 func (torrentDB *TorrentDB) Count(r render.Render) {
-	count, err := torrentDB.collection.Count()
-	if err != nil {
-		r.JSON(500, map[string]interface{}{"count": "API Error"})
-		return
-	}
-	r.JSON(200, map[string]interface{}{"count": count})
+	// count, err := torrentDB.collection.Count()
+	// if err != nil {
+	// 	r.JSON(500, map[string]interface{}{"count": "API Error"})
+	// 	return
+	// }
+	// r.JSON(200, map[string]interface{}{"count": count})
+	r.JSON(200, map[string]interface{}{"count": "hellu"})
 }
 
 func (torrentDB *TorrentDB) Categories(r render.Render) {
-	var result []string
-	err := torrentDB.collection.Find(nil).Distinct("category", &result)
-	if err != nil {
-		r.JSON(500, map[string]interface{}{"error": "API Error"})
-		return
-	}
-	var size int
-	for size = range result {
-	}
-	stats := make([]map[string]interface{}, size+1, size+1)
-	for i, cat := range result {
-		total, err := torrentDB.collection.Find(bson.M{"category": cat}).Count()
-		if err != nil {
-			stats[i] = map[string]interface{}{cat: 0}
-		} else {
-			stats[i] = map[string]interface{}{"name": cat, "count": total}
-		}
-	}
-	r.JSON(200, stats)
+	// var result []string
+	// err := torrentDB.collection.Find(nil).Distinct("category", &result)
+	// if err != nil {
+	// 	r.JSON(500, map[string]interface{}{"error": "API Error"})
+	// 	return
+	// }
+	// var size int
+	// for size = range result {
+	// }
+	// stats := make([]map[string]interface{}, size+1, size+1)
+	// for i, cat := range result {
+	// 	total, err := torrentDB.collection.Find(bson.M{"category": cat}).Count()
+	// 	if err != nil {
+	// 		stats[i] = map[string]interface{}{cat: 0}
+	// 	} else {
+	// 		stats[i] = map[string]interface{}{"name": cat, "count": total}
+	// 	}
+	// }
+	// r.JSON(200, stats)
+	r.JSON(200, "hiii")
 }
 
 func (torrentDB *TorrentDB) Browse(r render.Render, params martini.Params) {
-	result := []Torrent{}
-	err = torrentDB.collection.Find(bson.M{"category": params["category"]}).Limit(resultLimit).All(&result)
-	if err != nil {
-		r.JSON(404, map[string]interface{}{"message": err.Error()})
-		return
-	}
-	r.JSON(200, result)
+	// result := []Torrent{}
+	// err = torrentDB.collection.Find(bson.M{"category": params["category"]}).Limit(resultLimit).All(&result)
+	// if err != nil {
+	// 	r.JSON(404, map[string]interface{}{"message": err.Error()})
+	// 	return
+	// }
+	// r.JSON(200, result)
+	r.JSON(200, "alloooo")
 }
 
 func (torrentDB *TorrentDB) Search(r render.Render, params martini.Params) {
-	result := []Torrent{}
-	skip := 0
-	if value, ok := params["page"]; ok {
-		page, err := strconv.Atoi(value)
-		if err != nil {
-			r.JSON(400, map[string]interface{}{"message": err.Error()})
-			return
-		}
-		skip = page * resultLimit
-	}
-	pipe := torrentDB.collection.Pipe([]bson.M{
-		{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
-		{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
-		{"$skip": skip},
-		{"$limit": resultLimit},
-	})
-	iter := pipe.Iter()
-	err = iter.All(&result)
-	if err != nil {
-		r.JSON(404, map[string]interface{}{"message": err.Error()})
-		return
-	}
-	r.JSON(200, result)
+	// result := []Torrent{}
+	// skip := 0
+	// if value, ok := params["page"]; ok {
+	// 	page, err := strconv.Atoi(value)
+	// 	if err != nil {
+	// 		r.JSON(400, map[string]interface{}{"message": err.Error()})
+	// 		return
+	// 	}
+	// 	skip = page * resultLimit
+	// }
+	// pipe := torrentDB.collection.Pipe([]bson.M{
+	// 	{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
+	// 	{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
+	// 	{"$skip": skip},
+	// 	{"$limit": resultLimit},
+	// })
+	// iter := pipe.Iter()
+	// err = iter.All(&result)
+	// if err != nil {
+	// 	r.JSON(404, map[string]interface{}{"message": err.Error()})
+	// 	return
+	// }
+	// r.JSON(200, result)
+	r.JSON(200, "hithere")
 }
 
 func (torrentDB *TorrentDB) Get(r render.Render, params martini.Params) {
-	result := Torrent{}
-	err = torrentDB.collection.Find(bson.M{"_id": params["btih"]}).One(&result)
-	if err != nil {
-		r.JSON(404, map[string]interface{}{"message": "Torrent not found."})
-		return
-	}
-	r.JSON(200, result)
+	// result := Torrent{}
+	// err = torrentDB.collection.Find(bson.M{"_id": params["btih"]}).One(&result)
+	// if err != nil {
+	// 	r.JSON(404, map[string]interface{}{"message": "Torrent not found."})
+	// 	return
+	// }
+	// r.JSON(200, result)
+	r.JSON(200, "heyyyy")
 }
 
 func (torrentDB *TorrentDB) Insert(btih string, title string, category string, details string, download string) (bool, error) {
-	err := torrentDB.collection.Insert(
-		&Torrent{Btih: btih,
-			Title:    []string{title},
-			Category: []string{category},
-			Details:  []string{details},
-			Download: []string{download},
-			Swarm:    Stats{Seeders: 0, Leechers: 0},
-		})
+	tx, err := torrentDB.db.Begin()
 	if err != nil {
-		return false, errors.New("Something went wrong when trying to insert.")
+		log.Fatal(err)
 	}
+	stmt, err := tx.Prepare("insert into torrents(btih, title, category, details, download, seeders, leechers) values(?, ?, ?, ?, ?, null, null)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(btih, title, category, details, download)
+	if err != nil {
+		// Probably already exists
+		return false, errors.New("Insert did not complete. Probably a duplicate.")
+	}
+	tx.Commit()
 	return true, nil
 }
