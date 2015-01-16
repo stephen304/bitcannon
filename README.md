@@ -27,26 +27,30 @@ You should see the BitCannon interface at this point
 ### MongoDB
 * Install and run MongoDB from official packages
 
+You must build the web first, as it gets embedded into the api binary.
+
+### Web
+* Install node (`sudo pacman -S nodejs`)
+* Install bower and grunt with `sudo npm install -g grunt` and `sudo npm install -g grunt-cli`
+* In `/web` type `npm install`, `bower install`, and `grunt`
+* Check that the web built into the dist folder
+
 ### API
 * Clone the repo
 * Install go (`packer -S go-git`)
 * Set $GOPATH (`export GOPATH=$HOME/.go`)
 * Set $PATH (`export PATH="$PATH:$GOPATH/bin"`)
 * Restart your terminal if you added these env vars to the startup script
-* In /api, run `go get`
-* Type `make build` to compile the api into `build/`
+* Copy `api/config.example.json` to `config.json`
+* In the main folder, run `make build_api` to try to build
+* If go complains about dependencies, get them with `go get <url>`
+* Type `make build` in the main folder to compile the api into `build/`
 * Optional: Cross compile for other platforms
   * Run `go get github.com/mitchellh/gox`
   * Build the toolchain with `gox -build-toolchain`
-  * Compile with `make deploy`
+  * Compile with `make deploy` (Will make a zip containing all the binaries)
 * Run `bitcannon` to run the api server
 * Run `bitcannon <btArchive.txt>` to import torrents
-
-### Web
-* Install node (`sudo pacman -S nodejs`)
-* Install bower and grunt with `sudo npm install -g grunt` and `sudo npm install -g grunt-cli`
-* In `/web` type `npm install`, `bower install`, and `grunt`
-* Open `dist/index.html` to use BitCannon. Place the contents of the dist folder on a webserver to run it publicly
 
 ## Progress
 The early version of BitCannon aims to provide import functionality from bittorrent archives and a simple interface to browse and search your torrent database. Later versions may have more advanced features like auto updating torrent indexes and possibly more.
