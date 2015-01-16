@@ -18,7 +18,9 @@ Follow these steps to set up BitCannon for personal use:
 
 You should see the BitCannon interface at this point
 
-* Update/add torrents by downloading .gz torrent archives and dragging the extracted text files onto the bitcannon.exe
+* Update/add torrents by downloading .gz torrent archives
+* __Be sure to extract the txt file out of the gz file!__
+* Drag the extracted text file onto the bitcannon.exe
 
 ## How to use: Building From Source
 
