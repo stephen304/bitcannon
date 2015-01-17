@@ -15,6 +15,7 @@ deploy_api:
 copy_web:
 	rm -rf api/web
 	cp -r web/dist api/web
+	touch api/web/.gitkeep
 zip:
 	cd api; \
 	mv build bitcannon; \
