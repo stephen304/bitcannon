@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	// "log"
+	"bufio"
 	"github.com/antonholmquist/jason"
 	"io/ioutil"
 	"os"
@@ -53,6 +54,7 @@ func main() {
 
 	if len(os.Args) > 1 {
 		importFile(os.Args[1])
+		enterExit()
 	} else {
 		runServer(bitcannonPort)
 	}
@@ -64,4 +66,10 @@ func runServer(bitcannonPort string) {
 	api.AddRoutes()
 	go runAutoUpdate()
 	api.Run(":" + bitcannonPort)
+}
+
+func enterExit() {
+	fmt.Println("\n\nPress enter to quit...")
+	reader := bufio.NewReader(os.Stdin)
+	reader.ReadString('\n')
 }
