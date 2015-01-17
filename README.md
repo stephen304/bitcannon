@@ -48,14 +48,16 @@ You must build the web first, as it gets embedded into the api binary.
 
 Once you have all of the dependencies, it will build into the api/build folder.
 
+* Run `bitcannon` to run the server
+* Run `bitcannon <btArchive.txt>` to import torrents
+
+#### Extra things and tips
 * If you edit the web app, typing `make build` in the main folder will recompile both the web and api into `api/build`
 * If you only edited the api folder, use `make build_api` to avoid recompiling the web
 * Optional: Cross compile for other platforms (Your go installation must be from the source or it will spit errors)
   * Run `go get github.com/mitchellh/gox`
   * Build the toolchain with `gox -build-toolchain`
   * Compile with `make deploy` (Will make a zip containing all the binaries)
-* Run `bitcannon` to run the server
-* Run `bitcannon <btArchive.txt>` to import torrents
 
 ## Progress
 The early version of BitCannon aims to provide import functionality from bittorrent archives and a simple interface to browse and search your torrent database. Later versions may have more advanced features like auto updating torrent indexes and possibly more.
