@@ -18,7 +18,9 @@ func main() {
 	mongo := "127.0.0.1"
 	bitcannonPort := "1337"
 	f, err := ioutil.ReadFile("config.json")
-	if err == nil {
+	if err != nil {
+		fmt.Println("[!!!] Config not loaded")
+	} else {
 		json, err := jason.NewObjectFromBytes(f)
 		if err == nil {
 			val, err := json.GetString("mongo")
@@ -32,10 +34,11 @@ func main() {
 		}
 	}
 	// Try to connect to the database
-	fmt.Println("Connecting to Mongo at " + mongo)
+	fmt.Println("[OK!] Connecting to Mongo at " + mongo)
 	torrentDB, err = NewTorrentDB(mongo)
 	if err != nil {
-		fmt.Println("Couldn't connect to Mongo. Please make sure it is installed and running.")
+		fmt.Println("[ERR] I'm sorry! I Couldn't connect to Mongo.")
+		fmt.Println("      Please make sure it is installed and running.")
 		return
 	}
 	defer torrentDB.Close()
@@ -48,8 +51,7 @@ func main() {
 }
 
 func runServer(bitcannonPort string) {
-	fmt.Println("Starting the API server.")
-	fmt.Println("BitCannon now running on http://127.0.0.1:" + bitcannonPort + "/")
+	fmt.Println("[OK!] BitCannon is live at http://127.0.0.1:" + bitcannonPort + "/")
 	api := NewAPI()
 	api.AddRoutes()
 	api.Run(":" + bitcannonPort)
