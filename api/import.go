@@ -6,10 +6,21 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
 )
+
+func runAutoUpdate() {
+	for _, site := range archives {
+		url, err := site.GetString("url")
+		if err == nil {
+			importURL(url)
+		}
+	}
+	fmt.Print("[OK!] Finished auto importing.")
+}
 
 func importFile(filename string) {
 	// Print out status
@@ -38,24 +49,48 @@ func importFile(filename string) {
 		return
 	}
 	fmt.Println("[OK!] Extension is valid")
+	importReader(file, gzipped)
+}
 
+func importURL(url string) {
+	fmt.Println("[OK!] Starting to import from url:")
+	fmt.Println("      " + url)
+	response, err := http.Get(url)
+	if err != nil {
+		fmt.Println("[ERR] Oh no! Couldn't request torrent updates.")
+		fmt.Println("      Is your internet working? Is BitCannon firewalled?.")
+		return
+	}
+	defer response.Body.Close()
+
+	var gzipped bool = false
+	if strings.HasSuffix(url, ".txt") {
+		gzipped = false
+	} else if strings.HasSuffix(url, ".txt.gz") {
+		gzipped = true
+	} else {
+		fmt.Println("[!!!] I was given a URL that doesn't end in .txt or .txt.gz.")
+		fmt.Println("      I'll assume it's regular text.")
+	}
+	fmt.Println("[OK!] Compression detection complete")
+	importReader(response.Body, gzipped)
+}
+
+func importReader(reader io.Reader, gzipped bool) {
+	var scanner *bufio.Scanner
 	if gzipped {
-		reader, err := gzip.NewReader(file)
+		gReader, err := gzip.NewReader(reader)
 		if err != nil {
-			fmt.Println("[ERR] My bad! I tried to start uncompressing your archive.")
+			fmt.Println("[ERR] My bad! I tried to start uncompressing your archive but failed.")
 			fmt.Println("      Try checking the file, or send me the file so I can check it out.")
 			return
 		}
-		defer reader.Close()
+		defer gReader.Close()
 		fmt.Println("[OK!] GZip detected, unzipping enabled")
-		importReader(reader)
+		scanner = bufio.NewScanner(gReader)
 	} else {
-		importReader(file)
+		scanner = bufio.NewScanner(reader)
 	}
-}
-
-func importReader(reader io.Reader) {
-	scanner := bufio.NewScanner(reader)
 	fmt.Println("[OK!] Reading initialized")
 	imported := 0
 	skipped := 0

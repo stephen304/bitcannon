@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+var archives []*jason.Object
 var torrentDB *TorrentDB
 var err error
 
@@ -23,13 +24,20 @@ func main() {
 	} else {
 		json, err := jason.NewObjectFromBytes(f)
 		if err == nil {
+			// Get mongo connection details
 			val, err := json.GetString("mongo")
 			if err == nil {
 				mongo = val
 			}
+			// Get desired port
 			val, err = json.GetString("bitcannonPort")
 			if err == nil {
 				bitcannonPort = val
+			}
+			// Get archive sources
+			arc, err := json.GetObjectArray("archives")
+			if err == nil {
+				archives = arc
 			}
 		}
 	}
@@ -54,5 +62,6 @@ func runServer(bitcannonPort string) {
 	fmt.Println("[OK!] BitCannon is live at http://127.0.0.1:" + bitcannonPort + "/")
 	api := NewAPI()
 	api.AddRoutes()
+	go runAutoUpdate()
 	api.Run(":" + bitcannonPort)
 }
