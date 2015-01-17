@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -38,7 +39,6 @@ func importFile(filename string) {
 	}
 	fmt.Println("[OK!] Extension is valid")
 
-	var scanner *bufio.Scanner
 	if gzipped {
 		reader, err := gzip.NewReader(file)
 		if err != nil {
@@ -47,13 +47,16 @@ func importFile(filename string) {
 			return
 		}
 		defer reader.Close()
-		scanner = bufio.NewScanner(reader)
 		fmt.Println("[OK!] GZip detected, unzipping enabled")
+		importReader(reader)
 	} else {
-		scanner = bufio.NewScanner(file)
+		importReader(file)
 	}
-	fmt.Println("[OK!] Reading initialized")
+}
 
+func importReader(reader io.Reader) {
+	scanner := bufio.NewScanner(reader)
+	fmt.Println("[OK!] Reading initialized")
 	imported := 0
 	skipped := 0
 	// Now we scan ୧༼ಠ益ಠ༽୨
