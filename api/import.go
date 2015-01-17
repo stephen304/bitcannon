@@ -113,5 +113,8 @@ func importLine(line string) (bool, error) {
 		return false, errors.New("Something's up with this torrent. Expected 5 values separated by |.")
 	}
 	data := strings.Split(line, "|")
+	if len(data[0]) != 40 {
+		return false, errors.New("Probably not a torrent archive")
+	}
 	return torrentDB.Insert(data[0], data[1], data[2], data[3], data[4])
 }
