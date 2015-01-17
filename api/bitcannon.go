@@ -1,14 +1,11 @@
 package main
 
 import (
-	"bufio"
-	"errors"
 	"fmt"
 	// "log"
 	"github.com/antonholmquist/jason"
 	"io/ioutil"
 	"os"
-	"strings"
 )
 
 var torrentDB *TorrentDB
@@ -56,47 +53,4 @@ func runServer(bitcannonPort string) {
 	api := NewAPI()
 	api.AddRoutes()
 	api.Run(":" + bitcannonPort)
-}
-
-func importFile(filename string) {
-	fmt.Print("Attempting to parse ")
-	fmt.Println(filename)
-
-	file, err := os.Open(filename)
-	if err != nil {
-		fmt.Println("Error opening the file. Make sure it exists and is readable.")
-		return
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	imported := 0
-	skipped := 0
-	for scanner.Scan() {
-		status, _ := importLine(scanner.Text())
-		if status {
-			imported++
-		} else {
-			skipped++
-		}
-	}
-
-	fmt.Println("File parsing ended.")
-	fmt.Print("New: ")
-	fmt.Println(imported)
-	fmt.Print("Dup: ")
-	fmt.Println(skipped)
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println("The program encountered an error while reading the file. Ensure that the file isn't corrupted.")
-		return
-	}
-}
-
-func importLine(line string) (bool, error) {
-	if strings.Count(line, "|") != 4 {
-		return false, errors.New("Something's up with this torrent. Expected 5 values separated by |.")
-	}
-	data := strings.Split(line, "|")
-	return torrentDB.Insert(data[0], data[1], data[2], data[3], data[4])
 }
