@@ -127,7 +127,7 @@ func (torrentDB *TorrentDB) Insert(btih string, title string, category string, d
 			Category: []string{category},
 			Details:  []string{details},
 			Download: []string{download},
-			Swarm:    Stats{Seeders: 0, Leechers: 0},
+			Swarm:    Stats{Seeders: -1, Leechers: -1},
 		})
 	if err != nil {
 		return false, errors.New("Something went wrong when trying to insert.")
