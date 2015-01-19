@@ -7,6 +7,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"strconv"
+	"time"
 )
 
 type TorrentDB struct {
@@ -16,11 +17,12 @@ type TorrentDB struct {
 
 type Torrent struct {
 	Btih     string `bson:"_id,omitempty"`
-	Title    []string
-	Category []string
+	Title    string
+	Category string
 	Details  []string
 	Download []string
 	Swarm    Stats
+	Lastmod  time.Time
 }
 
 type Stats struct {
@@ -123,14 +125,21 @@ func (torrentDB *TorrentDB) Get(r render.Render, params martini.Params) {
 func (torrentDB *TorrentDB) Insert(btih string, title string, category string, details string, download string) (bool, error) {
 	err := torrentDB.collection.Insert(
 		&Torrent{Btih: btih,
-			Title:    []string{title},
-			Category: []string{category},
+			Title:    title,
+			Category: category,
 			Details:  []string{details},
 			Download: []string{download},
 			Swarm:    Stats{Seeders: -1, Leechers: -1},
+			Lastmod:  time.Now(),
 		})
 	if err != nil {
 		return false, errors.New("Something went wrong when trying to insert.")
 	}
 	return true, nil
+}
+
+func (torrentDB *TorrentDB) Update(btih string, seeders int, leechers int) {
+	match := bson.M{"_id": btih}
+	update := bson.M{"$set": bson.M{"swarm": &Stats{Seeders: seeders, Leechers: leechers}, "lastmod": time.Now()}}
+	torrentDB.collection.Update(match, update)
 }

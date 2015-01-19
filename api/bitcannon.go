@@ -9,6 +9,7 @@ import (
 	"os"
 )
 
+var trackers []string
 var archives []*jason.Object
 var torrentDB *TorrentDB
 var err error
@@ -39,6 +40,11 @@ func main() {
 			arc, err := json.GetObjectArray("archives")
 			if err == nil {
 				archives = arc
+			}
+			// Get trackers
+			trac, err := json.GetStringArray("trackers")
+			if err == nil {
+				trackers = trac
 			}
 		}
 	}

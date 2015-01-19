@@ -13,10 +13,10 @@
     <tbody>
       <tr ng-repeat="result in results">
         <td>
-          <a ui-sref="torrent({btih: '{{result.Btih}}'})">{{result.Title[0]}}</a>
+          <a ui-sref="torrent({btih: '{{result.Btih}}'})">{{result.Title}}</a>
         </td>
         <td>
-          {{result.Category[0]}}
+          {{result.Category}}
         </td>
       </tr>
     </tbody>
