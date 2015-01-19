@@ -41,6 +41,8 @@ func importFile(filename string) {
 	var gzipped bool = false
 	if strings.HasSuffix(filename, ".txt") {
 		gzipped = false
+	} else if strings.HasSuffix(filename, ".csv") {
+		gzipped = false
 	} else if strings.HasSuffix(filename, ".txt.gz") {
 		gzipped = true
 	} else {
@@ -65,6 +67,8 @@ func importURL(url string) {
 
 	var gzipped bool = false
 	if strings.HasSuffix(url, ".txt") {
+		gzipped = false
+	} else if strings.HasSuffix(url, ".csv") {
 		gzipped = false
 	} else if strings.HasSuffix(url, ".txt.gz") {
 		gzipped = true
@@ -109,15 +113,27 @@ func importReader(reader io.Reader, gzipped bool) {
 }
 
 func importLine(line string) (bool, error) {
-	if strings.Count(line, "|") != 4 {
-		return false, errors.New("Something's up with this torrent. Expected 5 values separated by |.")
+	var size int
+	if strings.Count(line, "|") == 4 {
+		data := strings.Split(line, "|")
+		if len(data[0]) != 40 {
+			return false, errors.New("Probably not a torrent archive")
+		}
+		if data[2] == "" {
+			data[2] = "Other"
+		}
+		return torrentDB.Insert(data[0], data[1], data[2], 0, data[3], data[4])
+	} else if strings.Count(line, "|") == 6 {
+		data := strings.Split(line, "|")
+		if len(data[2]) != 40 {
+			return false, errors.New("Probably not a torrent archive")
+		}
+		if data[4] == "" {
+			data[4] = "Other"
+		}
+		size, _ = strconv.Atoi(data[1])
+		return torrentDB.Insert(data[2], data[0], data[4], size, "", "")
+	} else {
+		return false, errors.New("Something's up with this torrent.")
 	}
-	data := strings.Split(line, "|")
-	if len(data[0]) != 40 {
-		return false, errors.New("Probably not a torrent archive")
-	}
-	if data[2] == "" {
-		data[2] = "Other"
-	}
-	return torrentDB.Insert(data[0], data[1], data[2], data[3], data[4])
 }
