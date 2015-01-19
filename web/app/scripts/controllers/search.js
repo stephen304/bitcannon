@@ -16,7 +16,7 @@ angular.module('bitCannonApp')
     ];
     $scope.query = $stateParams.query;
     var init = function() {
-      $http.get($rootScope.api + '/search/' + $scope.query).
+      $http.get($rootScope.api + 'search/' + $scope.query).
         success(function(data, status) {
           if (status === 200) {
             $scope.results = data;

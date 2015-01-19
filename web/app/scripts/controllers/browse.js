@@ -15,7 +15,7 @@ angular.module('bitCannonApp')
       'Karma'
     ];
     var init = function() {
-      $http.get($rootScope.api + '/browse').
+      $http.get($rootScope.api + 'browse').
         success(function(data, status) {
           if (status === 200) {
             $scope.results = data;

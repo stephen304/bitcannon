@@ -16,7 +16,7 @@ angular.module('bitCannonApp')
     ];
     $scope.category = $stateParams.category;
     var init = function() {
-      $http.get($rootScope.api + '/browse/' + $scope.category).
+      $http.get($rootScope.api + 'browse/' + $scope.category).
         success(function(data, status) {
           if (status === 200) {
             $scope.results = data;

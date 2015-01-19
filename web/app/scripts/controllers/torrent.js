@@ -16,7 +16,7 @@ angular.module('bitCannonApp')
     ];
     $scope.btih = $stateParams.btih;
     var init = function() {
-      $http.get($rootScope.api + '/torrent/' + $scope.btih).
+      $http.get($rootScope.api + 'torrent/' + $scope.btih).
         success(function(data, status) {
           console.log(data);
           if (status === 200) {
