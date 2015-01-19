@@ -116,5 +116,8 @@ func importLine(line string) (bool, error) {
 	if len(data[0]) != 40 {
 		return false, errors.New("Probably not a torrent archive")
 	}
+	if data[2] == "" {
+		data[2] = "Other"
+	}
 	return torrentDB.Insert(data[0], data[1], data[2], data[3], data[4])
 }
