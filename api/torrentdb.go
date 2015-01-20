@@ -19,7 +19,7 @@ type Torrent struct {
 	Btih     string `bson:"_id,omitempty"`
 	Title    string
 	Category string
-	Size int
+	Size     int
 	Details  []string
 	Download []string
 	Swarm    Stats
@@ -129,7 +129,7 @@ func (torrentDB *TorrentDB) Insert(btih string, title string, category string, s
 		&Torrent{Btih: btih,
 			Title:    title,
 			Category: category,
-			Size: size,
+			Size:     size,
 			Details:  []string{details},
 			Download: []string{download},
 			Swarm:    Stats{Seeders: -1, Leechers: -1},
