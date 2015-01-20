@@ -30,6 +30,7 @@ func (api *API) AddRoutes() {
 	api.M.Get("/torrent/:btih", torrentDB.Get)
 	api.M.Get("/search/:query", torrentDB.Search)
 	api.M.Get("/search/:query/:page", torrentDB.Search)
+	api.M.Get("/scrape/:btih", apiScrape)
 }
 
 func (api *API) Run(port string) {

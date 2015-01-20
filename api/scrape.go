@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/Stephen304/goscrape"
+	"github.com/go-martini/martini"
+	"github.com/martini-contrib/render"
 	"github.com/oleiade/lane"
 )
 
@@ -28,10 +30,19 @@ func multiScrape(btih string, urls []string) (int, int) {
 	leech := 0
 	for _, url := range urls {
 		newSeed, newLeech, _, err := goscrape.Udp(btih, url)
-		if err != nil && newSeed > seed && newLeech > leech {
-			seed = newSeed
-			leech = newLeech
+		if err == nil {
+			if newSeed > seed {
+				seed = newSeed
+			}
+			if newLeech > leech {
+				leech = newLeech
+			}
 		}
 	}
 	return seed, leech
+}
+
+func apiScrape(r render.Render, params martini.Params) {
+	seed, leech := multiScrape(params["btih"], trackers)
+	r.JSON(200, map[string]interface{}{"seeders": seed, "leechers": leech})
 }
