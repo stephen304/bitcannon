@@ -38,6 +38,7 @@ func NewTorrentDB(url string) (*TorrentDB, error) {
 	session.SetMode(mgo.Monotonic, true)
 	collection := session.DB("bitcannon").C("torrents")
 	collection.EnsureIndex(mgo.Index{Key: []string{"$text:title"}, Name: "title"})
+	collection.EnsureIndex(mgo.Index{Key: []string{"category"}, Name: "category"})
 	return &TorrentDB{session, collection}, nil
 }
 
