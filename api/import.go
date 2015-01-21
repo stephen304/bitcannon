@@ -122,7 +122,7 @@ func importLine(line string) (bool, error) {
 		if data[2] == "" {
 			data[2] = "Other"
 		}
-		return torrentDB.Insert(data[0], data[1], data[2], 0, data[3], data[4])
+		return torrentDB.Insert(data[0], data[1], data[2], 0, data[3])
 	} else if strings.Count(line, "|") == 6 {
 		data := strings.Split(line, "|")
 		if len(data[2]) != 40 {
@@ -132,7 +132,7 @@ func importLine(line string) (bool, error) {
 			data[4] = "Other"
 		}
 		size, _ = strconv.Atoi(data[1])
-		return torrentDB.Insert(data[2], data[0], data[4], size, "", "")
+		return torrentDB.Insert(data[2], data[0], data[4], size, "")
 	} else {
 		return false, errors.New("Something's up with this torrent.")
 	}

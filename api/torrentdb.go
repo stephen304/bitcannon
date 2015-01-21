@@ -21,7 +21,6 @@ type Torrent struct {
 	Category string
 	Size     int
 	Details  []string
-	Download []string
 	Swarm    Stats
 	Lastmod  time.Time
 }
@@ -124,14 +123,17 @@ func (torrentDB *TorrentDB) Get(r render.Render, params martini.Params) {
 	r.JSON(200, result)
 }
 
-func (torrentDB *TorrentDB) Insert(btih string, title string, category string, size int, details string, download string) (bool, error) {
+func (torrentDB *TorrentDB) Insert(btih string, title string, category string, size int, details string) (bool, error) {
+	var detailsArr []string
+	if details != "" {
+		detailsArr = []string{details}
+	}
 	err := torrentDB.collection.Insert(
 		&Torrent{Btih: btih,
 			Title:    title,
 			Category: category,
 			Size:     size,
-			Details:  []string{details},
-			Download: []string{download},
+			Details:  detailsArr,
 			Swarm:    Stats{Seeders: -1, Leechers: -1},
 			Lastmod:  time.Now(),
 		})
