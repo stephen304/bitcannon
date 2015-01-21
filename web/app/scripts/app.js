@@ -12,7 +12,8 @@ angular
   .module('bitCannonApp', [
     'ngAnimate',
     'ui.router',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'angularMoment'
   ])
   .config(function($stateProvider, $urlRouterProvider, $compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|magnet):/);
