@@ -1,6 +1,40 @@
 <div class="container">
-  <h1>{{torrent.Title}}</h1>
-  <a class="btn btn-success" href="magnet:?xt=urn:btih:{{torrent.Btih}}" role="button">Download</a>
+  <h3>{{torrent.Title}}</h3>
+  <div class="row">
+    <div class="col-md-8">
+      <h4>Torrent Details</h4>
+      <ul class="list-group">
+        <li class="list-group-item">
+          Info Hash
+          <span class="label label-default pull-right">{{torrent.Btih}}</span>
+        </li>
+        <li class="list-group-item">
+          Category
+          <span class="label label-default pull-right">{{torrent.Category}}</span>
+        </li>
+        <li class="list-group-item">
+          File Size
+          <span class="label label-default pull-right">{{torrent.Size}} bytes</span>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <h4>Tracker Stats</h4>
+      <ul class="list-group">
+        <li class="list-group-item">
+          Seeders
+          <span class="label label-success pull-right">{{torrent.Swarm.Seeders}}</span>
+        </li>
+        <li class="list-group-item">
+          Leechers
+          <span class="label label-danger pull-right">{{torrent.Swarm.Leechers}}</span>
+        </li>
+        <li class="list-group-item">
+          Last Updated
+          <span class="label label-default pull-right">{{torrent.Lastmod}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <a href="magnet:?xt=urn:btih:{{torrent.Btih}}" class="btn btn-success" style="width: 100%;" role="button">Download!</a>
 </div>
-
-<!-- <p>This is the Torrent view for {{btih}}</p> -->
