@@ -18,8 +18,7 @@ func scrapeWork() {
 		btihInterface, _ := scrapeQueue.Pop()
 		if btihInterface != nil {
 			if btih, ok := btihInterface.(string); ok {
-				seeders, leechers := multiScrape(btih, trackers)
-				torrentDB.Update(btih, seeders, leechers)
+				multiScrape(btih, trackers)
 			}
 		}
 	}
@@ -39,6 +38,7 @@ func multiScrape(btih string, urls []string) (int, int) {
 			}
 		}
 	}
+	torrentDB.Update(btih, seed, leech)
 	return seed, leech
 }
 
