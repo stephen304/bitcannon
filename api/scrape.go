@@ -5,6 +5,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/oleiade/lane"
+	"time"
 )
 
 var scrapeQueue *lane.PQueue = lane.NewPQueue(lane.MINPQ)
@@ -44,5 +45,5 @@ func multiScrape(btih string, urls []string) (int, int) {
 
 func apiScrape(r render.Render, params martini.Params) {
 	seed, leech := multiScrape(params["btih"], trackers)
-	r.JSON(200, map[string]interface{}{"seeders": seed, "leechers": leech})
+	r.JSON(200, map[string]interface{}{"Swarm": map[string]interface{}{"Seeders": seed, "Leechers": leech}, "Lastmod": time.Now()})
 }
