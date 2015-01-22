@@ -18,13 +18,27 @@ angular.module('bitCannonApp')
     var init = function() {
       $http.get($rootScope.api + 'torrent/' + $scope.btih).
         success(function(data, status) {
-          console.log(data);
           if (status === 200) {
             $scope.torrent = data;
           }
         else {
           // Error!
         }
+        }).
+        error(function() {
+          // Error!
+        });
+    };
+    $scope.refresh = function() {
+      $http.get($rootScope.api + 'scrape/' + $scope.btih).
+        success(function(data, status) {
+          if (status === 200) {
+            $scope.torrent.Swarm = data.Swarm;
+            $scope.torrent.Lastmod = data.Lastmod;
+          }
+          else {
+            // Error!
+          }
         }).
         error(function() {
           // Error!

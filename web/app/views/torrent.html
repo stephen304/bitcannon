@@ -17,6 +17,7 @@
           <span class="label label-default pull-right">{{torrent.Size}} bytes</span>
         </li>
       </ul>
+      <a href="magnet:?xt=urn:btih:{{torrent.Btih}}" class="btn btn-success" style="width: 100%;" role="button">Download!</a>
     </div>
     <div class="col-md-4">
       <h4>Tracker Stats</h4>
@@ -34,7 +35,7 @@
           <span class="label label-default pull-right" am-time-ago="torrent.Lastmod"></span>
         </li>
       </ul>
+      <a ng-click="refresh()" class="btn btn-info" style="width: 100%;">Refresh Trackers</a>
     </div>
   </div>
-  <a href="magnet:?xt=urn:btih:{{torrent.Btih}}" class="btn btn-success" style="width: 100%;" role="button">Download!</a>
 </div>
