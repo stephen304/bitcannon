@@ -43,6 +43,12 @@ angular
         controller: 'SearchCtrl',
         pageTitle: 'Search'
       })
+      .state('searchCategory', {
+        url: '/search/:query/c/:category',
+        templateUrl: 'views/search.html',
+        controller: 'SearchCtrl',
+        pageTitle: 'Search'
+      })
       .state('torrent', {
         url: '/torrent/:btih',
         templateUrl: 'views/torrent.html',
