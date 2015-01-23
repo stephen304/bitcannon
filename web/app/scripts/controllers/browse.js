@@ -14,5 +14,4 @@ angular.module('bitCannonApp')
       'AngularJS',
       'Karma'
     ];
-    $scope.categories = $rootScope.categories;
   });

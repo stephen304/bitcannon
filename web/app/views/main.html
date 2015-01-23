@@ -1,8 +1,13 @@
 <div class="container text-center">
   <img src="images/bitcannon.png" width="">
   <form ng-submit="submit()">
-    <div class="form-group">
+    <div class="form-group input-group" style="width:100%;">
       <input class="form-control" type="search" ng-model="query">
+      <span class="input-group-btn" style="min-width:200px;">
+        <select class="form-control" style="float: right;" ng-model="selectedCategory" ng-options="category.name for category in categories track by category.name">
+          <option value="">All</option>
+        </select>
+      </span>
     </div>
   </form>
 </div>

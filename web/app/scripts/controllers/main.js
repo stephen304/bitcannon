@@ -16,9 +16,16 @@ angular.module('bitCannonApp')
     ];
     $scope.submit = function() {
       if ($scope.query) {
-        $state.go('search', {
-          query: $scope.query
-        });
+        if ($scope.selectedCategory) {
+          $state.go('searchCategory', {
+            query: $scope.query,
+            category: $scope.selectedCategory.name
+          });
+        } else {
+          $state.go('search', {
+            query: $scope.query
+          });
+        }
       }
     };
   });

@@ -73,7 +73,7 @@ angular
       $http.get($rootScope.api + 'browse').
       success(function(data, status) {
         if (status === 200) {
-          $rootScope.results = data;
+          $rootScope.categories = data;
         }
         else {
           // Error!
