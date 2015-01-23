@@ -96,7 +96,7 @@ func (torrentDB *TorrentDB) Search(r render.Render, params martini.Params) {
 			r.JSON(400, map[string]interface{}{"message": err.Error()})
 			return
 		}
-		skip = page * resultLimit
+		skip = (page - 1) * resultLimit
 	}
 	var pipe *mgo.Pipe
 	if category, ok := params["category"]; ok {
