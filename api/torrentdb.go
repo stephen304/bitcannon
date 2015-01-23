@@ -98,12 +98,23 @@ func (torrentDB *TorrentDB) Search(r render.Render, params martini.Params) {
 		}
 		skip = page * resultLimit
 	}
-	pipe := torrentDB.collection.Pipe([]bson.M{
-		{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
-		{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
-		{"$skip": skip},
-		{"$limit": resultLimit},
-	})
+	var pipe *mgo.Pipe
+	if category, ok := params["category"]; ok {
+		pipe = torrentDB.collection.Pipe([]bson.M{
+			{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
+			{"$match": bson.M{"category": category}},
+			{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
+			{"$skip": skip},
+			{"$limit": resultLimit},
+		})
+	} else {
+		pipe = torrentDB.collection.Pipe([]bson.M{
+			{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
+			{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
+			{"$skip": skip},
+			{"$limit": resultLimit},
+		})
+	}
 	iter := pipe.Iter()
 	err = iter.All(&result)
 	if err != nil {
