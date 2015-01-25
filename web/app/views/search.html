@@ -3,20 +3,38 @@
     <thead>
       <tr>
         <th>
+          Category
+        </th>
+        <th>
+          DL
+        </th>
+        <th>
           Name
         </th>
         <th>
-          Category
+          Imported
+        </th>
+        <th style="width: 70px;">
+          Swarm
         </th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="result in results">
         <td>
+          {{result.Category}}
+        </td>
+        <td>
+          <a href="magnet:?xt=urn:btih:{{result.Btih}}"><i class="fa fa-magnet"></i></a>
+        </td>
+        <td>
           <a ui-sref="torrent({btih: '{{result.Btih}}'})">{{result.Title}}</a>
         </td>
         <td>
-          {{result.Category}}
+          <span class="label label-default pull-right" am-time-ago="result.Imported"></span>
+        </td>
+        <td>
+          <span class="label label-success">{{result.Swarm.Seeders}}</span> <span class="label label-danger">{{result.Swarm.Leechers}}</span>
         </td>
       </tr>
     </tbody>
