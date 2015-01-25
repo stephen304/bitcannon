@@ -35,7 +35,10 @@
           <span class="label label-default pull-right" am-time-ago="torrent.Lastmod"></span>
         </li>
       </ul>
-      <a ng-click="refresh()" class="btn btn-info" style="width: 100%;" ng-class="{disabled: refreshing}" ng-switch="refreshing"><span ng-switch-when="true"><i class="fa fa-refresh fa-spin"></i></span><span ng-switch-default="">Refresh Trackers</span></a>
+      <a ng-click="refresh()" class="btn btn-info animate-slide-container" style="width: 100%;" ng-class="{disabled: refreshing}" ng-switch="refreshing">
+        <span ng-switch-when="true" class="animate-slide"><i class="fa fa-refresh fa-spin"></i></span>
+        <span ng-switch-default="" class="animate-slide">Refresh Trackers</span>
+      </a>
     </div>
   </div>
   <div class="row">

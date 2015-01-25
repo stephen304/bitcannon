@@ -19,3 +19,32 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     border: 0;
     outline : 0;
 }
+
+/* Slide down transition animations */
+.animate-slide-container {
+  position:relative;
+  height:43px;
+  overflow:hidden;
+}
+.animate-slide {
+  padding:10px;
+}
+.animate-slide.ng-animate {
+  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+}
+.animate-slide.ng-enter {
+  top:-50px;
+}
+.animate-slide.ng-leave.ng-leave-active {
+  top:50px;
+}
+.animate-slide.ng-leave,
+.animate-slide.ng-enter.ng-enter-active {
+  top:0;
+}
