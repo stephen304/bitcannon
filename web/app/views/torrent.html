@@ -5,8 +5,8 @@
       <h4>Torrent Details</h4>
       <ul class="list-group">
         <li class="list-group-item">
-          Info Hash
-          <span class="label label-default pull-right">{{torrent.Btih}}</span>
+          Import Date
+          <span class="label label-default pull-right" am-time-ago="torrent.Imported"></span>
         </li>
         <li class="list-group-item">
           Category
@@ -36,6 +36,16 @@
         </li>
       </ul>
       <a ng-click="refresh()" class="btn btn-info" style="width: 100%;" ng-class="{disabled: refreshing}" ng-switch="refreshing"><span ng-switch-when="true"><i class="fa fa-refresh fa-spin"></i></span><span ng-switch-default="">Refresh Trackers</span></a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Sources</h4>
+      <ul class="list-group">
+        <li ng-repeat="source in torrent.Details" class="list-group-item">
+          <a ng-href="{{source}}">{{source}}</a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
