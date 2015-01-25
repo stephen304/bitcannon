@@ -17,7 +17,7 @@
           <span class="label label-default pull-right">{{torrent.Size}} bytes</span>
         </li>
       </ul>
-      <a href="magnet:?xt=urn:btih:{{torrent.Btih}}" class="btn btn-success" style="width: 100%;" role="button">Download!</a>
+      <a href="magnet:?xt=urn:btih:{{torrent.Btih + magnetTrackers}}" class="btn btn-success" style="width: 100%;" role="button">Download!</a>
     </div>
     <div class="col-md-4">
       <h4>Tracker Stats</h4>

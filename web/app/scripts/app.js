@@ -82,6 +82,25 @@ angular
       error(function() {
         // Error!
       });
+      $http.get($rootScope.api + 'stats').
+      success(function(data, status) {
+        if (status === 200) {
+          $rootScope.stats = data;
+          $rootScope.magnetTrackers = '';
+          for (var index = 0; index < data.Trackers.length; ++index) {
+            $rootScope.magnetTrackers = $rootScope.magnetTrackers + '&tr=' + data.Trackers[index];
+          }
+          $rootScope.magnetTrackers = $rootScope.magnetTrackers.replace(/\//g, '%2F');
+          $rootScope.magnetTrackers = $rootScope.magnetTrackers.replace(/:/g, '%3A');
+          console.log($rootScope.magnetTrackers);
+        }
+        else {
+          // Error!
+        }
+      }).
+      error(function() {
+        // Error!
+      });
     };
     init();
   });

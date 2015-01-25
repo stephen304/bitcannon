@@ -24,7 +24,7 @@ func NewAPI() *API {
 }
 
 func (api *API) AddRoutes() {
-	api.M.Get("/stats", torrentDB.Count)
+	api.M.Get("/stats", torrentDB.Stats)
 	api.M.Get("/browse", torrentDB.Categories)
 	api.M.Get("/browse/:category", torrentDB.Browse)
 	api.M.Get("/torrent/:btih", torrentDB.Get)

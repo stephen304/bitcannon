@@ -47,13 +47,13 @@ func (torrentDB *TorrentDB) Close() {
 	torrentDB.session.Close()
 }
 
-func (torrentDB *TorrentDB) Count(r render.Render) {
+func (torrentDB *TorrentDB) Stats(r render.Render) {
 	count, err := torrentDB.collection.Count()
 	if err != nil {
-		r.JSON(500, map[string]interface{}{"count": "API Error"})
+		r.JSON(500, map[string]interface{}{"message": "API Error"})
 		return
 	}
-	r.JSON(200, map[string]interface{}{"count": count})
+	r.JSON(200, map[string]interface{}{"Count": count, "Trackers": trackers})
 }
 
 func (torrentDB *TorrentDB) Categories(r render.Render) {

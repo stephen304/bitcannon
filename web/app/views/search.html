@@ -14,7 +14,7 @@
         <th>
           Imported
         </th>
-        <th style="width: 70px;">
+        <th>
           Swarm
         </th>
       </tr>
@@ -25,15 +25,15 @@
           {{result.Category}}
         </td>
         <td>
-          <a href="magnet:?xt=urn:btih:{{result.Btih}}"><i class="fa fa-magnet"></i></a>
+          <a href="magnet:?xt=urn:btih:{{result.Btih + magnetTrackers}}"><i class="fa fa-magnet"></i></a>
         </td>
         <td>
           <a ui-sref="torrent({btih: '{{result.Btih}}'})">{{result.Title}}</a>
         </td>
         <td>
-          <span class="label label-default pull-right" am-time-ago="result.Imported"></span>
+          <span style="margin-top:4px;" class="label label-default pull-right" am-time-ago="result.Imported"></span>
         </td>
-        <td>
+        <td style="white-space:nowrap;">
           <span class="label label-success">{{result.Swarm.Seeders}}</span> <span class="label label-danger">{{result.Swarm.Leechers}}</span>
         </td>
       </tr>
