@@ -23,6 +23,7 @@ type Torrent struct {
 	Details  []string
 	Swarm    Stats
 	Lastmod  time.Time
+	Imported time.Time
 }
 
 type Stats struct {
@@ -147,6 +148,7 @@ func (torrentDB *TorrentDB) Insert(btih string, title string, category string, s
 			Details:  detailsArr,
 			Swarm:    Stats{Seeders: -1, Leechers: -1},
 			Lastmod:  time.Now(),
+			Imported: time.Now(),
 		})
 	if err != nil {
 		return false, errors.New("Something went wrong when trying to insert.")
