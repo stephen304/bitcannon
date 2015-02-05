@@ -40,6 +40,8 @@ func NewTorrentDB(url string) (*TorrentDB, error) {
 	collection := session.DB("bitcannon").C("torrents")
 	collection.EnsureIndex(mgo.Index{Key: []string{"$text:title"}, Name: "title"})
 	collection.EnsureIndex(mgo.Index{Key: []string{"category"}, Name: "category"})
+	collection.EnsureIndex(mgo.Index{Key: []string{"swarm.seeders"}, Name: "seeders"})
+	collection.EnsureIndex(mgo.Index{Key: []string{"lastmod"}, Name: "lastmod"})
 	return &TorrentDB{session, collection}, nil
 }
 
@@ -80,7 +82,7 @@ func (torrentDB *TorrentDB) Categories(r render.Render) {
 
 func (torrentDB *TorrentDB) Browse(r render.Render, params martini.Params) {
 	result := []Torrent{}
-	err = torrentDB.collection.Find(bson.M{"category": params["category"]}).Limit(resultLimit).All(&result)
+	err = torrentDB.collection.Find(bson.M{"category": params["category"]}).Sort("-swarm.seeders").Limit(resultLimit).All(&result)
 	if err != nil {
 		r.JSON(404, map[string]interface{}{"message": err.Error()})
 		return
@@ -104,14 +106,14 @@ func (torrentDB *TorrentDB) Search(r render.Render, params martini.Params) {
 		pipe = torrentDB.collection.Pipe([]bson.M{
 			{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
 			{"$match": bson.M{"category": category}},
-			{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
+			{"$sort": bson.M{"swarm.seeders": -1}},
 			{"$skip": skip},
 			{"$limit": resultLimit},
 		})
 	} else {
 		pipe = torrentDB.collection.Pipe([]bson.M{
 			{"$match": bson.M{"$text": bson.M{"$search": params["query"]}}},
-			{"$sort": bson.M{"score": bson.M{"$meta": "textScore"}}},
+			{"$sort": bson.M{"swarm.seeders": -1}},
 			{"$skip": skip},
 			{"$limit": resultLimit},
 		})
@@ -160,4 +162,18 @@ func (torrentDB *TorrentDB) Update(btih string, seeders int, leechers int) {
 	match := bson.M{"_id": btih}
 	update := bson.M{"$set": bson.M{"swarm": &Stats{Seeders: seeders, Leechers: leechers}, "lastmod": time.Now()}}
 	torrentDB.collection.Update(match, update)
+}
+
+func (torrentDB *TorrentDB) GetStale() []string {
+	result := []Torrent{}
+	err = torrentDB.collection.Find(bson.M{"swarm.seeders": -1, "swarm.leechers": -1}).Limit(50).All(&result)
+	if err != nil {
+		// No unscraped torrents, get stale ones
+		torrentDB.collection.Find(nil).Sort("lastmod").One(&result)
+	}
+	var btih = make([]string, len(result))
+	for i := range result {
+		btih[i] = result[i].Btih
+	}
+	return btih
 }
