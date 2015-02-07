@@ -70,7 +70,7 @@ func runServer(bitcannonPort string) {
 	fmt.Println("[OK!] BitCannon is live at http://127.0.0.1:" + bitcannonPort + "/")
 	api := NewAPI()
 	api.AddRoutes()
-	go runAutoUpdate()
+	runScheduler()
 	api.Run(":" + bitcannonPort)
 }
 

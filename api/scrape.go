@@ -1,49 +1,35 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Stephen304/goscrape"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
-	"github.com/oleiade/lane"
 	"time"
 )
 
-var scrapeQueue *lane.PQueue = lane.NewPQueue(lane.MINPQ)
-
-func queueBtih(btih string, priority int) {
-	scrapeQueue.Push(btih, priority)
-}
-
-func scrapeWork() {
+func scrapeWorker() {
+	bulk := goscrape.NewBulk(trackers)
 	for {
-		btihInterface, _ := scrapeQueue.Pop()
-		if btihInterface != nil {
-			if btih, ok := btihInterface.(string); ok {
-				multiScrape(btih, trackers)
-			}
+		stale := torrentDB.GetStale()
+		if len(stale) > 1 {
+			results := bulk.ScrapeBulk(stale)
+			multiUpdate(results)
+		} else {
+			fmt.Println("no work pause for 1 sec")
+			time.Sleep(5 * time.Second)
 		}
 	}
 }
 
-func multiScrape(btih string, urls []string) (int, int) {
-	seed := 0
-	leech := 0
-	for _, url := range urls {
-		newSeed, newLeech, _, err := goscrape.Udp(btih, url)
-		if err == nil {
-			if newSeed > seed {
-				seed = newSeed
-			}
-			if newLeech > leech {
-				leech = newLeech
-			}
-		}
+func multiUpdate(results []goscrape.Result) {
+	for _, result := range results {
+		torrentDB.Update(result.Btih, result.Seeders, result.Leechers)
 	}
-	torrentDB.Update(btih, seed, leech)
-	return seed, leech
 }
 
 func apiScrape(r render.Render, params martini.Params) {
-	seed, leech := multiScrape(params["btih"], trackers)
-	r.JSON(200, map[string]interface{}{"Swarm": map[string]interface{}{"Seeders": seed, "Leechers": leech}, "Lastmod": time.Now()})
+	result := goscrape.Single(trackers, []string{params["btih"]})[0]
+	multiUpdate([]goscrape.Result{result})
+	r.JSON(200, map[string]interface{}{"Swarm": map[string]interface{}{"Seeders": result.Seeders, "Leechers": result.Leechers}, "Lastmod": time.Now()})
 }

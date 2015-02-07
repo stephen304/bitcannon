@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"gopkg.in/mgo.v2"
@@ -167,9 +168,9 @@ func (torrentDB *TorrentDB) Update(btih string, seeders int, leechers int) {
 func (torrentDB *TorrentDB) GetStale() []string {
 	result := []Torrent{}
 	err = torrentDB.collection.Find(bson.M{"swarm.seeders": -1, "swarm.leechers": -1}).Limit(50).All(&result)
-	if err != nil {
+	if len(result) == 0 {
 		// No unscraped torrents, get stale ones
-		torrentDB.collection.Find(nil).Sort("lastmod").One(&result)
+		torrentDB.collection.Find(bson.M{"lastmod": bson.M{"$lt": time.Now().Add(-24 * time.Hour)}}).Sort("lastmod").Limit(50).All(&result)
 	}
 	var btih = make([]string, len(result))
 	for i := range result {
