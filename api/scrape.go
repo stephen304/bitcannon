@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/Stephen304/goscrape"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
@@ -16,8 +15,7 @@ func scrapeWorker() {
 			results := bulk.ScrapeBulk(stale)
 			multiUpdate(results)
 		} else {
-			fmt.Println("no work pause for 1 sec")
-			time.Sleep(5 * time.Second)
+			time.Sleep(30 * time.Second)
 		}
 	}
 }
