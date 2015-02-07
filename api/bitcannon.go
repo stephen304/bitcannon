@@ -1,11 +1,10 @@
 package main
 
 import (
-	"fmt"
-	// "log"
 	"bufio"
 	"github.com/antonholmquist/jason"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -22,7 +21,7 @@ func main() {
 	bitcannonPort := "1337"
 	f, err := ioutil.ReadFile("config.json")
 	if err != nil {
-		fmt.Println("[!!!] Config not loaded")
+		log.Println("[!!!] Config not loaded")
 	} else {
 		json, err := jason.NewObjectFromBytes(f)
 		if err == nil {
@@ -49,11 +48,11 @@ func main() {
 		}
 	}
 	// Try to connect to the database
-	fmt.Println("[OK!] Connecting to Mongo at " + mongo)
+	log.Println("[OK!] Connecting to Mongo at " + mongo)
 	torrentDB, err = NewTorrentDB(mongo)
 	if err != nil {
-		fmt.Println("[ERR] I'm sorry! I Couldn't connect to Mongo.")
-		fmt.Println("      Please make sure it is installed and running.")
+		log.Println("[ERR] I'm sorry! I Couldn't connect to Mongo.")
+		log.Println("      Please make sure it is installed and running.")
 		return
 	}
 	defer torrentDB.Close()
@@ -67,7 +66,7 @@ func main() {
 }
 
 func runServer(bitcannonPort string) {
-	fmt.Println("[OK!] BitCannon is live at http://127.0.0.1:" + bitcannonPort + "/")
+	log.Println("[OK!] BitCannon is live at http://127.0.0.1:" + bitcannonPort + "/")
 	api := NewAPI()
 	api.AddRoutes()
 	runScheduler()
@@ -75,7 +74,7 @@ func runServer(bitcannonPort string) {
 }
 
 func enterExit() {
-	fmt.Println("\n\nPress enter to quit...")
+	log.Println("\n\nPress enter to quit...")
 	reader := bufio.NewReader(os.Stdin)
 	reader.ReadString('\n')
 }
