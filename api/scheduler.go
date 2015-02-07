@@ -3,6 +3,6 @@ package main
 import ()
 
 func runScheduler() {
-	go runAutoUpdate()
+	go importScheduler()
 	go scrapeWorker()
 }

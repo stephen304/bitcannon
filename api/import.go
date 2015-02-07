@@ -10,16 +10,27 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
-func runAutoUpdate() {
+func importScheduler() {
 	for _, site := range archives {
 		url, err := site.GetString("url")
 		if err == nil {
+			freq, err := site.GetInt64("frequency")
+			if err == nil {
+				go importWorker(url, int(freq))
+			}
 			importURL(url)
 		}
 	}
 	fmt.Print("[OK!] Finished auto importing.")
+}
+
+func importWorker(url string, freq int) {
+	for _ = range time.Tick(time.Duration(freq) * time.Second) {
+		importURL(url)
+	}
 }
 
 func importFile(filename string) {
