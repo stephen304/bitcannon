@@ -1,6 +1,8 @@
 {
   "mongo": "127.0.0.1",
   "bitcannonPort": "1337",
+  "scrapeEnabled": true,
+  "scrapeDelay": 0,
   "trackers": [
     "udp://tracker1.com:80",
     "udp://tracker2.com:1337"

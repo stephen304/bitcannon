@@ -4,5 +4,7 @@ import ()
 
 func runScheduler() {
 	go importScheduler()
-	go scrapeWorker()
+	if config.ScrapeEnabled {
+		go scrapeWorker()
+	}
 }

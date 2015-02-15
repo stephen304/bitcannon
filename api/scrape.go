@@ -17,6 +17,7 @@ func scrapeWorker() {
 		} else {
 			time.Sleep(30 * time.Second)
 		}
+		time.Sleep(time.Duration(config.ScrapeDelay) * time.Second)
 	}
 }
 

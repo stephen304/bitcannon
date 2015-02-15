@@ -8,6 +8,12 @@ import (
 	"os"
 )
 
+type Config struct {
+	ScrapeEnabled bool
+	ScrapeDelay   int
+}
+
+var config = Config{ScrapeEnabled: false, ScrapeDelay: 0}
 var trackers []string
 var archives []*jason.Object
 var torrentDB *TorrentDB
@@ -44,6 +50,16 @@ func main() {
 			trac, err := json.GetStringArray("trackers")
 			if err == nil {
 				trackers = trac
+			}
+			// Get scraping enabled
+			scrape, err := json.GetBoolean("scrapeEnabled")
+			if err == nil {
+				config.ScrapeEnabled = scrape
+			}
+			// Get scrape delay
+			scrapeDelay, err := json.GetInt64("scrapeDelay")
+			if err == nil {
+				config.ScrapeDelay = int(scrapeDelay)
 			}
 		}
 	}
