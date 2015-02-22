@@ -8,7 +8,7 @@ import (
 )
 
 func scrapeWorker() {
-	bulk := goscrape.NewBulk(trackers)
+	bulk := goscrape.NewBulk(trackers, config.LocalUdpPort)
 	for {
 		stale := torrentDB.GetStale()
 		if len(stale) > 1 {
@@ -28,7 +28,7 @@ func multiUpdate(results []goscrape.Result) {
 }
 
 func apiScrape(r render.Render, params martini.Params) {
-	result := goscrape.Single(trackers, []string{params["btih"]})[0]
+	result := goscrape.Single(trackers, []string{params["btih"]}, config.LocalUdpPort)[0]
 	multiUpdate([]goscrape.Result{result})
 	r.JSON(200, map[string]interface{}{"Swarm": map[string]interface{}{"Seeders": result.Seeders, "Leechers": result.Leechers}, "Lastmod": time.Now()})
 }

@@ -11,6 +11,7 @@ import (
 type Config struct {
 	ScrapeEnabled bool
 	ScrapeDelay   int
+	LocalUdpPort  int
 }
 
 var config = Config{ScrapeEnabled: false, ScrapeDelay: 0}
@@ -61,6 +62,15 @@ func main() {
 			if err == nil {
 				config.ScrapeDelay = int(scrapeDelay)
 			}
+			// Get localUdpPort if it exists:
+			localUdpPort, err := json.GetInt64("localUdpPort")
+			if err == nil {
+				config.LocalUdpPort = int(localUdpPort)
+			} else {
+				config.LocalUdpPort = 0
+			}
+		} else {
+			log.Printf("[!!!] JSON err: %v", err)
 		}
 	}
 	// Try to connect to the database
