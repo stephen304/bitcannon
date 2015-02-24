@@ -10,6 +10,7 @@
     "bootswatch-dist": "3.3.0-flatly",
     "angular-loading-bar": "*",
     "angular-moment": "~0.9.0",
+    "ngInfiniteScroll": "1.2.0",
     "fontawesome": "~4.2.0"
   },
   "devDependencies": {

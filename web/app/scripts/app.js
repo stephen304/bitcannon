@@ -13,7 +13,8 @@ angular
     'ngAnimate',
     'ui.router',
     'angular-loading-bar',
-    'angularMoment'
+    'angularMoment',
+    'infinite-scroll'
   ])
   .config(function($stateProvider, $urlRouterProvider, $compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|magnet):/);

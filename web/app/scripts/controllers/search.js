@@ -16,24 +16,35 @@ angular.module('bitCannonApp')
     ];
     $scope.query = $stateParams.query;
     $scope.category = $stateParams.category;
+    $scope.results = [];
     if (typeof $scope.category === 'undefined') {
       // Do nothing
     } else {
       $scope.query = $scope.query + '/c/' + $scope.category;
     }
-    var init = function() {
-      $http.get($rootScope.api + 'search/' + $scope.query).
+    $scope.busy = false;
+    $scope.infinite = function() {
+      if ($scope.busy) {return;}
+      $scope.busy = true;
+      $http.get($rootScope.api + 'search/' + $scope.query + '/s/' + $scope.results.length).
         success(function(data, status) {
           if (status === 200) {
-            $scope.results = data;
+            if (data.length === 0) {
+              $scope.infinite = function(){};
+            }
+            for (var i = 0; i < data.length; i++) {
+              $scope.results.push(data[i]);
+            }
+            $scope.busy = false;
           }
-        else {
-          // Error!
-        }
+          else {
+            $scope.busy = false;
+            // Error!
+          }
         }).
         error(function() {
+          $scope.busy = false;
           // Error!
         });
     };
-    init();
   });

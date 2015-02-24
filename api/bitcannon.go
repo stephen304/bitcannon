@@ -19,7 +19,7 @@ var archives []*jason.Object
 var torrentDB *TorrentDB
 var err error
 
-const resultLimit int = 100
+const resultLimit int = 200
 
 func main() {
 	// Get mongo url from config.json, otherwise default to 127.0.0.1

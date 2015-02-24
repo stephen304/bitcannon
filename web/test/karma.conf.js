@@ -25,6 +25,7 @@ module.exports = function(config) {
       'bower_components/angular-loading-bar/build/loading-bar.min.js',
       'bower_components/moment/moment.js',
       'bower_components/angular-moment/angular-moment.js',
+      'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js'

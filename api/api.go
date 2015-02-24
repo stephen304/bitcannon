@@ -30,9 +30,9 @@ func (api *API) AddRoutes() {
 	api.M.Get("/torrent/:btih", torrentDB.Get)
 
 	api.M.Get("/search/:query", torrentDB.Search)
-	api.M.Get("/search/:query/p/:page", torrentDB.Search)
+	api.M.Get("/search/:query/s/:skip", torrentDB.Search)
 	api.M.Get("/search/:query/c/:category", torrentDB.Search)
-	api.M.Get("/search/:query/c/:category/p/:page", torrentDB.Search)
+	api.M.Get("/search/:query/c/:category/s/:skip", torrentDB.Search)
 
 	api.M.Get("/scrape/:btih", apiScrape)
 }
