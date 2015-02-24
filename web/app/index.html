@@ -46,6 +46,13 @@
       </div>
     </div>
 
+      <div class="container" ng-if="message" ng-cloak>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" class="close" aria-label="Close" ng-click="clearMessage()"><span aria-hidden="true">&times;</span></button>
+          <strong>Warning:</strong> {{message}}
+        </div>
+      </div>
+
       <div ui-view="" ng-controller="MainCtrl"></div>
 
       <div class="footer text-center">

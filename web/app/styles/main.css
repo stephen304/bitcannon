@@ -8,6 +8,10 @@ body {
   height: 60px;
 }
 
+.alert {
+  margin-top: 20px;
+}
+
 /* Remove dotted outline on focused elements */
 a:focus, a:active,
 button::-moz-focus-inner,

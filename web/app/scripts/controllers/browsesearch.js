@@ -22,11 +22,11 @@ angular.module('bitCannonApp')
             $scope.results = data;
           }
         else {
-          // Error!
+          $rootScope.message = data.message;
         }
         }).
         error(function() {
-          // Error!
+          $rootScope.message = 'API Request failed.';
         });
     };
     init();

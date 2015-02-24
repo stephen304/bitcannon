@@ -22,11 +22,11 @@ angular.module('bitCannonApp')
             $scope.torrent = data;
           }
         else {
-          // Error!
+          $rootScope.message = data.message;
         }
         }).
         error(function() {
-          // Error!
+          $rootScope.message = 'API Request failed.';
         });
     };
     $scope.refreshing = false;
@@ -45,12 +45,12 @@ angular.module('bitCannonApp')
           }
           else {
             $scope.refreshing = false;
-            // Error!
+            $rootScope.message = data.message;
           }
         }).
         error(function() {
           $scope.refreshing = false;
-          // Error!
+          $rootScope.message = 'API Request failed.';
         });
     };
     init();

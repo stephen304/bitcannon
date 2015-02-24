@@ -62,7 +62,7 @@ func (torrentDB *TorrentDB) Categories(r render.Render) {
 	var result []string
 	err := torrentDB.collection.Find(nil).Distinct("category", &result)
 	if err != nil {
-		r.JSON(500, map[string]interface{}{"error": "API Error"})
+		r.JSON(500, map[string]interface{}{"message": "API Error"})
 		return
 	}
 	var size int

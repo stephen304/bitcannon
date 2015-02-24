@@ -39,12 +39,12 @@ angular.module('bitCannonApp')
           }
           else {
             $scope.busy = false;
-            // Error!
+            $rootScope.message = data.message;
           }
         }).
         error(function() {
           $scope.busy = false;
-          // Error!
+          $rootScope.message = 'API Request failed.';
         });
     };
   });

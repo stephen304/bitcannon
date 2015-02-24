@@ -93,15 +93,17 @@ angular
           }
           $rootScope.magnetTrackers = $rootScope.magnetTrackers.replace(/\//g, '%2F');
           $rootScope.magnetTrackers = $rootScope.magnetTrackers.replace(/:/g, '%3A');
-          console.log($rootScope.magnetTrackers);
         }
         else {
-          // Error!
+          $rootScope.message = data.message;
         }
       }).
       error(function() {
-        // Error!
+        $rootScope.message = 'API Request failed.';
       });
+    };
+    $rootScope.clearMessage = function() {
+      $rootScope.message = null;
     };
     init();
   });
