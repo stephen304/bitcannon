@@ -29,21 +29,18 @@ angular.module('bitCannonApp')
       $http.get($rootScope.api + 'search/' + $scope.query + '/s/' + $scope.results.length).
         success(function(data, status) {
           if (status === 200) {
-            if (data.length === 0) {
-              $scope.infinite = function(){};
-            }
             for (var i = 0; i < data.length; i++) {
               $scope.results.push(data[i]);
             }
-            $scope.busy = false;
+            if (data.length > 0) {
+              $scope.busy = false;
+            }
           }
           else {
-            $scope.busy = false;
             $rootScope.message = data.message;
           }
         }).
         error(function() {
-          $scope.busy = false;
           $rootScope.message = 'API Request failed.';
         });
     };
