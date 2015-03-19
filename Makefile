@@ -1,23 +1,24 @@
 build: build_web copy_web build_api
-	echo "BitCannon built to api/build"
-deploy: build_web copy_web deploy_api zip
-	echo "BitCannon zipped to BitCannon.zip"
+	@echo "BitCannon built to api/build"
+deploy: build_web copy_web deploy_api package
+	@echo "BitCannon releases zipped in the build folder."
 
 build_web:
-	cd web; \
+	@echo Building the web app...
+	@cd web; \
 	grunt
+	@echo Finished building web.
 build_api:
-	cd api; \
+	@cd api; \
 	make build
 deploy_api:
-	cd api; \
+	@cd api; \
 	make deploy
 copy_web:
-	rm -rf api/web
-	cp -r web/dist api/web
-	touch api/web/.gitkeep
-zip:
-	cd api; \
-	mv build bitcannon; \
-	zip -r ../BitCannon.zip bitcannon; \
-	mv bitcannon build
+	@echo Copying the web app to the api...
+	@rm -rf api/web
+	@cp -r web/dist api/web
+	@touch api/web/.gitkeep
+package:
+	@cd api; \
+	make package
