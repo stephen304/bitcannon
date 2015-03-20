@@ -25,6 +25,7 @@ func main() {
 	// Get mongo url from config.json, otherwise default to 127.0.0.1
 	mongo := "127.0.0.1"
 	bitcannonPort := "1337"
+	bitcannonBindIp := "0.0.0.0"
 	f, err := ioutil.ReadFile("config.json")
 	if err != nil {
 		log.Println("[!!!] Config not loaded")
@@ -61,6 +62,11 @@ func main() {
 			if err == nil {
 				config.ScrapeDelay = int(scrapeDelay)
 			}
+			// Get desired listening host
+			val, err = json.GetString("bitcannonBindIp")
+			if err == nil {
+				bitcannonBindIp = val
+			}
 		}
 	}
 	// Try to connect to the database
@@ -77,16 +83,16 @@ func main() {
 		importFile(os.Args[1])
 		enterExit()
 	} else {
-		runServer(bitcannonPort)
+		runServer(bitcannonPort, bitcannonBindIp)
 	}
 }
 
-func runServer(bitcannonPort string) {
+func runServer(bitcannonPort string, bitcannonBindIp string) {
 	log.Println("[OK!] BitCannon is live at http://127.0.0.1:" + bitcannonPort + "/")
 	api := NewAPI()
 	api.AddRoutes()
 	runScheduler()
-	api.Run(":" + bitcannonPort)
+	api.Run(bitcannonBindIp + ":" + bitcannonPort)
 }
 
 func enterExit() {
