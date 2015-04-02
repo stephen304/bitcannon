@@ -21,6 +21,7 @@ type Torrent struct {
 	Category string
 	Size     int
 	Details  []string
+	Files    []string
 	Swarm    Stats
 	Lastmod  time.Time
 	Imported time.Time
