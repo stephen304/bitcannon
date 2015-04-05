@@ -133,7 +133,11 @@ func importLine(line string) (bool, error) {
 		if data[2] == "" {
 			data[2] = "Other"
 		}
-		return torrentDB.Insert(data[0], data[1], data[2], 0, data[3])
+		if (!categoryInBlacklisted(data[2],blacklistedCategories)) {
+			return torrentDB.Insert(data[0], data[1], data[2], 0, data[3])
+		} else {
+			return false, errors.New("Skipping torrent due to category "+data[2]+" in blacklist")
+		}
 	} else if strings.Count(line, "|") == 6 {
 		data := strings.Split(line, "|")
 		if len(data[2]) != 40 {
@@ -143,8 +147,22 @@ func importLine(line string) (bool, error) {
 			data[4] = "Other"
 		}
 		size, _ = strconv.Atoi(data[1])
-		return torrentDB.Insert(data[2], data[0], data[4], size, "")
+		if (!categoryInBlacklisted(data[4],blacklistedCategories)) {
+			return torrentDB.Insert(data[2], data[0], data[4], size, "")
+		} else {
+			return false, errors.New("Skipping torrent due to category "+data[4]+" in blacklist")
+		}
 	} else {
 		return false, errors.New("Something's up with this torrent.")
 	}
+}
+
+//http://stackoverflow.com/questions/15323767/how-to-if-x-in-array-in-golang
+func categoryInBlacklisted(a string, list []string) bool {
+    for _, b := range list {
+        if b == a {
+            return true
+        }
+    }
+    return false
 }

@@ -8,6 +8,10 @@
     "udp://tracker1.com:80",
     "udp://tracker2.com:1337"
   ],
+  "blacklisted_categories": [
+    "Category to blacklist 1",
+    "Category to blacklist 2"
+  ],
   "archives": [{
     "name": "Site1",
     "url": "http://site1.com/archive.txt.gz",
