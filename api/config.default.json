@@ -1,0 +1,13 @@
+{
+  "mongo": "127.0.0.1",
+  "bitcannonBindIp": "0.0.0.0",
+  "bitcannonPort": "1337",
+  "scrapeEnabled": true,
+  "scrapeDelay": 0,
+  "trackers": [
+    "udp://open.demonii.com:1337",
+    "udp://tracker.publicbt.com:80",
+    "udp://tracker.openbittorrent.com:80"
+  ],
+  "archives": []
+}
