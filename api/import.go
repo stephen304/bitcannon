@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	_ "crypto/sha512"
 )
 
 func importScheduler() {
