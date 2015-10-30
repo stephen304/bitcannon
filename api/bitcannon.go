@@ -15,6 +15,7 @@ type Config struct {
 
 var config = Config{ScrapeEnabled: false, ScrapeDelay: 0}
 var trackers []string
+var blacklistedCategories []string
 var archives []*jason.Object
 var torrentDB *TorrentDB
 var err error
@@ -51,6 +52,11 @@ func main() {
 			trac, err := json.GetStringArray("trackers")
 			if err == nil {
 				trackers = trac
+			}
+			// Get blacklisted categories
+			blackCats, err := json.GetStringArray("blacklisted_categories")
+			if err == nil {
+				blacklistedCategories = blackCats
 			}
 			// Get scraping enabled
 			scrape, err := json.GetBoolean("scrapeEnabled")
