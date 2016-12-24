@@ -16,8 +16,12 @@ angular.module('bitCannonApp')
     ];
     $scope.btih = $stateParams.btih;
     $scope.showFiles = function() {
-      if($scope.showed == false) $scope.showed = true;
-      else $scope.showed = false;
+      if($scope.showed === false) {
+        $scope.showed = true;
+      }
+      else {
+        $scope.showed = false;
+      }
     };
     var init = function() {
       $http.get($rootScope.api + 'torrent/' + $scope.btih).
