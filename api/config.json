@@ -1,5 +1,5 @@
 {
-  "mongo": "127.0.0.1",
+  "mongo": "mongo",
   "bitcannonBindIp": "0.0.0.0",
   "bitcannonPort": "1337",
   "scrapeEnabled": true,
