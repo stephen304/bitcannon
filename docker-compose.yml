@@ -1,0 +1,23 @@
+version: '2'
+services:
+  bitcannon_front:
+    build: ./web
+    image: bitcannon_front
+    container_name: bitcannon_front
+    ports:
+      - "80:9000"
+  bitcannon_api:
+    build: ./api
+    image: bitcannon_api
+    container_name: bitcannon_api
+    links:
+      - mongo
+      - bitcannon_front
+    ports:
+      - "8000:1337"
+  mongo: 
+    image: mongo
+    container_name: mongo
+    restart: always
+    volumes:
+      - /data/db

@@ -2,36 +2,41 @@
 
 /**
  * @ngdoc function
- * @name bitCannonApp.controller:BrowsesearchCtrl
+ * @name bitCannonApp.controller:BrowseCtrl
  * @description
- * # BrowsesearchCtrl
+ * # BrowseCtrl
  * Controller of the bitCannonApp
  */
 angular.module('bitCannonApp')
-  .controller('BrowsesearchCtrl', function ($rootScope, $scope, $stateParams, $http) {
+  .controller('LastCtrl', function ($rootScope, $scope, $http) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
       'Karma'
     ];
-    $scope.category = $stateParams.category;
-    var init = function() {
-      $http.get($rootScope.api + 'browse/' + $scope.category).
+    $scope.busy = false;
+    $scope.results = [];
+    $scope.infinite = function() {
+      if($scope.busy){return;}
+      $scope.busy = true;
+      $http.get($rootScope.api + 'last' + '/s/' + $scope.results.length).
         success(function(data, status) {
           if (status === 200) {
             for (var i = 0; i < data.length; i++) {
               var row = data[i];
               row.Details = '&tr='+row.Details.join('&tr=');
+              $scope.results.push(row);
             }
-            $scope.results = data;
+            if(data.length > 0) {
+              $scope.busy = false;
+            }
           }
-        else {
-          $rootScope.message = data.message;
-        }
+          else {
+            $rootScope.message = data.message;
+          }
         }).
         error(function() {
           $rootScope.message = 'API Request failed.';
         });
     };
-    init();
   });

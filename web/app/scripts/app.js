@@ -32,6 +32,12 @@ angular
         controller: 'BrowseCtrl',
         pageTitle: 'Browse'
       })
+      .state('last', {
+        url: '/last',
+        templateUrl: 'views/last.html',
+        controller: 'LastCtrl',
+        pageTitle: 'Latests'
+      })
       .state('browseSearch', {
         url: '/browse/:category',
         templateUrl: 'views/search.html',

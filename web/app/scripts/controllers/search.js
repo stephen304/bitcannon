@@ -30,7 +30,9 @@ angular.module('bitCannonApp')
         success(function(data, status) {
           if (status === 200) {
             for (var i = 0; i < data.length; i++) {
-              $scope.results.push(data[i]);
+              var row = data[i];
+              row.Details = '&tr='+row.Details.join('&tr=');
+              $scope.results.push(row);
             }
             if (data.length > 0) {
               $scope.busy = false;
